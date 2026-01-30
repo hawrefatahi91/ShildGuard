@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ShildGuard | Quiz</title>
+  <style>
+    :root{
+      --bg1:#2b1b5a;
+      --bg2:#0b2a6b;
+      --card:rgba(255,255,255,.08);
+      --border:rgba(255,255,255,.18);
+      --text:#ffffff;
+      --muted:rgba(255,255,255,.85);
+      --danger: rgba(255,120,120,.35);
+      --good: rgba(120,255,170,.28);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      min-height:100vh;
+      background: radial-gradient(1200px 800px at 20% 10%, rgba(255,255,255,.10), transparent 60%),
+                  linear-gradient(135deg, var(--bg1), var(--bg2));
+      padding:20px;
+    }
+    .container{ width:min(980px,100%); margin:0 auto; }
+    nav{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:12px 14px; border:1px solid var(--border);
+      background:rgba(0,0,0,.12); border-radius:14px; margin-bottom:18px;
+      backdrop-filter: blur(6px);
+    }
+    .logo{ font-weight:800; letter-spacing:.3px; }
+    .links{ display:flex; flex-wrap:wrap; gap:10px; }
+    .link{
+      color:var(--text); text-decoration:none; padding:9px 12px;
+      border-radius:12px; border:1px solid transparent; opacity:.95;
+    }
+    .link:hover{ border-color:var(--border); background:rgba(255,255,255,.10); }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.25);
+    }
+    h1{ margin:0 0 8px 0; font-size:clamp(24px, 3vw, 34px); }
+    p{ margin:0 0 12px 0; color:var(--muted); line-height:1.7; }
+    .q{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:14px;
+      margin:12px 0;
+      background:rgba(0,0,0,.10);
+    }
+    .q h3{ margin:0 0 10px 0; font-size:16px; }
+    label{ display:block; padding:6px 8px; border-radius:10px; cursor:pointer; }
+    label:hover{ background:rgba(255,255,255,.08); }
+    input[type="radio"]{ margin-right:8px; transform: translateY(1px); }
+    .btnRow{ display:flex; flex-wrap:wrap; gap:12px; margin-top:14px; }
+    button, .btnLink{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      color:var(--text);
+      background: rgba(255,255,255,.16);
+      border:1px solid var(--border);
+      padding:12px 16px;
+      border-radius:12px;
+      font-weight:800;
+      transition:.15s ease;
+      text-decoration:none;
+      display:inline-block;
+    }
+    button:hover, .btnLink:hover{ transform: translateY(-1px); background: rgba(255,255,255,.22); }
+    .result{
+      margin-top:16px;
+      padding:14px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.12);
+    }
+    .badge{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      font-weight:800;
+      margin-left:8px;
+    }
+    .note{ font-size:13px; opacity:.8; margin-top:8px; }
+    .hidden{ display:none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <div class="logo">🛡️ ShildGuard</div>
+      <div class="links">
+        <a class="link" href="index.html">Home</a>
+        <a class="link" href="mission.html">Mission</a>
+        <a class="link" href="quiz.html">Quiz</a>
+        <a class="link" href="contact.html">Contact</a>
+      </div>
+    </nav>
+
+    <section class="card">
+      <h1>Cybersecurity Awareness Quiz</h1>
+      <p>
+        20 questions about phishing and awareness. Choose the best answer for each question, then submit to see your score.
+      </p>
+
+      <form id="quizForm">
+        <!-- Questions injected by JS -->
+        <div id="questions"></div>
+
+        <div class="btnRow">
+          <button type="submit">Submit Quiz</button>
+          <button type="button" id="resetBtn">Reset</button>
+        </div>
+      </form>
+
+      <div id="resultBox" class="result hidden" aria-live="polite"></div>
+
+      <div id="feedbackBox" class="result hidden">
+        <h2 style="margin:0 0 8px 0; font-size:18px;">Was this quiz helpful?</h2>
+        <p style="margin:0 0 10px 0;">
+          Your feedback helps ShildGuard improve training for people and organizations.
+        </p>
+        <a id="feedbackEmailBtn" class="btnLink" href="#">
+          Send Feedback (Email)
+        </a>
+        <div class="note">
+          This opens your email app with a pre-filled message to <strong>shildguard.supp@gmail.com</strong>.
+        </div>
+      </div>
+
+      <div class="note">
+        Privacy note: This site doesn’t store your answers on a server (GitHub Pages is static). Scoring happens in your browser.
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const questionsData = [
+      {
+        q: "1) What is a common sign of a phishing email?",
+        options: [
+          "A familiar sender address you recognize",
+          "Urgent language asking you to act immediately",
+          "A well-written message with no links",
+          "An email that only contains your first name"
+        ],
+        a: 1
+      },
+      {
+        q: "2) What should you do before clicking a link in an email?",
+        options: [
+          "Click quickly to avoid missing out",
+          "Forward it to everyone",
+          "Hover over the link to preview the real URL",
+          "Reply asking the sender to resend it"
+        ],
+        a: 2
+      },
+      {
+        q: "3) Which is the safest way to access your bank website?",
+        options: [
+          "Click the link in a random email",
+          "Type the official URL manually or use a trusted bookmark",
+          "Use a search result without checking the domain",
+          "Ask a friend to send you the link"
+        ],
+        a: 1
+      },
+      {
+        q: "4) What does 2FA (two-factor authentication) do?",
+        options: [
+          "It makes your password shorter",
+          "It adds a second verification step beyond the password",
+          "It removes the need for a password",
+          "It only works on public Wi-Fi"
+        ],
+        a: 1
+      },
+      {
+        q: "5) A message says your account will be locked in 10 minutes unless you log in. What is the best response?",
+        options: [
+          "Click the link and sign in immediately",
+          "Provide your password by replying to the email",
+          "Verify through official channels (app/known website) or contact IT/support",
+          "Ignore forever and never report it"
+        ],
+        a: 2
+      },
+      {
+        q: "6) Which password is strongest?",
+        options: [
+          "Password123",
+          "Summer2026!",
+          "CorrectHorseBatteryStaple!27",
+          "ShildGuard"
+        ],
+        a: 2
+      },
+      {
+        q: "7) What is ‘social engineering’?",
+        options: [
+          "Writing secure code",
+          "Manipulating people into revealing information or doing actions",
+          "Upgrading routers",
+          "Encrypting a hard drive"
+        ],
+        a: 1
+      },
+      {
+        q: "8) If an attachment ends in .exe from an unknown sender, you should:",
+        options: [
+          "Open it to see what it is",
+          "Delete/report it as suspicious",
+          "Rename it to .pdf and open it",
+          "Upload it to social media"
+        ],
+        a: 1
+      },
+      {
+        q: "9) What is a ‘spoofed’ email?",
+        options: [
+          "An email with a funny subject line",
+          "An email with encrypted attachments only",
+          "An email where the sender address is forged to look legitimate",
+          "An email sent from a mailing list"
+        ],
+        a: 2
+      },
+      {
+        q: "10) Which is a safer habit on public Wi-Fi?",
+        options: [
+          "Disable device updates permanently",
+          "Use a VPN and avoid sensitive logins if possible",
+          "Share your hotspot password publicly",
+          "Turn off your firewall"
+        ],
+        a: 1
+      },
+      {
+        q: "11) What should you do if you suspect you entered credentials into a phishing site?",
+        options: [
+          "Do nothing",
+          "Change your password immediately and report to IT/security",
+          "Wait to see if anything happens",
+          "Post about it publicly with screenshots"
+        ],
+        a: 1
+      },
+      {
+        q: "12) Which email detail is MOST reliable for checking legitimacy?",
+        options: [
+          "The logo looks correct",
+          "The sender display name",
+          "The actual sender domain and full email address",
+          "The message uses your company name"
+        ],
+        a: 2
+      },
+      {
+        q: "13) A ‘smishing’ attack is phishing via:",
+        options: [
+          "SMS/text messages",
+          "Phone calls only",
+          "USB devices",
+          "Printer paper"
+        ],
+        a: 0
+      },
+      {
+        q: "14) What is ‘vishing’?",
+        options: [
+          "Phishing over voice/phone calls",
+          "A type of firewall",
+          "A password manager feature",
+          "A secure Wi-Fi standard"
+        ],
+        a: 0
+      },
+      {
+        q: "15) Why should you avoid reusing passwords?",
+        options: [
+          "It makes typing slower",
+          "If one site is breached, attackers can try the same password elsewhere",
+          "It reduces internet speed",
+          "It breaks antivirus software"
+        ],
+        a: 1
+      },
+      {
+        q: "16) A request from ‘CEO’ asks you to buy gift cards urgently. This is likely:",
+        options: [
+          "A normal finance process",
+          "A CEO impersonation scam (business email compromise style)",
+          "A safe HR request",
+          "A legal compliance audit"
+        ],
+        a: 1
+      },
+      {
+        q: "17) What should you do with suspicious emails at work?",
+        options: [
+          "Forward to coworkers as a warning (without reporting)",
+          "Report using your company’s reporting method (button/helpdesk) and delete",
+          "Reply asking if it’s real",
+          "Keep it in your inbox"
+        ],
+        a: 1
+      },
+      {
+        q: "18) Which is a safe way to handle software updates?",
+        options: [
+          "Delay updates forever",
+          "Install updates from official sources promptly when possible",
+          "Only update when something breaks",
+          "Download updates from random popups"
+        ],
+        a: 1
+      },
+      {
+        q: "19) What is a common goal of phishing?",
+        options: [
+          "Improving your security",
+          "Stealing credentials or getting you to install malware",
+          "Reducing spam",
+          "Teaching awareness"
+        ],
+        a: 1
+      },
+      {
+        q: "20) Which action best protects sensitive data?",
+        options: [
+          "Sharing accounts to save time",
+          "Using least privilege + strong authentication + cautious sharing",
+          "Posting files to public links for convenience",
+          "Turning off screen locks"
+        ],
+        a: 1
+      }
+    ];
+
+    const questionsDiv = document.getElementById("questions");
+    const quizForm = document.getElementById("quizForm");
+    const resultBox = document.getElementById("resultBox");
+    const feedbackBox = document.getElementById("feedbackBox");
+    const feedbackEmailBtn = document.getElementById("feedbackEmailBtn");
+    const resetBtn = document.getElementById("resetBtn");
+
+    function renderQuestions(){
+      questionsDiv.innerHTML = "";
+      questionsData.forEach((item, idx) => {
+        const qWrap = document.createElement("div");
+        qWrap.className = "q";
+
+        const title = document.createElement("h3");
+        title.textContent = item.q;
+        qWrap.appendChild(title);
+
+        item.options.forEach((opt, optIdx) => {
+          const label = document.createElement("label");
+          const radio = document.createElement("input");
+          radio.type = "radio";
+          radio.name = "q" + idx;
+          radio.value = optIdx;
+          label.appendChild(radio);
+          label.appendChild(document.createTextNode(opt));
+          qWrap.appendChild(label);
+        });
+
+        questionsDiv.appendChild(qWrap);
+      });
+    }
+
+    function getAnswers(){
+      const answers = [];
+      for(let i=0;i<questionsData.length;i++){
+        const picked = document.querySelector(`input[name="q${i}"]:checked`);
+        answers.push(picked ? Number(picked.value) : null);
+      }
+      return answers;
+    }
+
+    function scoreQuiz(answers){
+      let score = 0;
+      answers.forEach((ans, i) => {
+        if(ans !== null && ans === questionsData[i].a) score++;
+      });
+      return score;
+    }
+
+    function buildFeedbackEmail(score, answers){
+      // Basic summary: score + which question numbers were missed (no correct answers listed)
+      const missed = [];
+      answers.forEach((ans, i) => {
+        if(ans === null || ans !== questionsData[i].a) missed.push(i+1);
+      });
+
+      const subject = encodeURIComponent("ShildGuard Quiz Feedback");
+      const bodyLines = [
+        "Hi ShildGuard team,",
+        "",
+        "I completed the Cybersecurity Awareness Quiz.",
+        `Score: ${score}/20`,
+        missed.length ? `Questions I struggled with: ${missed.join(", ")}` : "I got all questions correct.",
+        "",
+        "Was it helpful? (yes/no): ",
+        "What should be improved?: ",
+        "",
+        "Thanks!"
+      ];
+      const body = encodeURIComponent(bodyLines.join("\n"));
+      return `mailto:shildguard.supp@gmail.com?subject=${subject}&body=${body}`;
+    }
+
+    quizForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const answers = getAnswers();
+      const unanswered = answers.filter(a => a === null).length;
+
+      if(unanswered > 0){
+        resultBox.classList.remove("hidden");
+        resultBox.style.background = "rgba(255,120,120,.20)";
+        resultBox.innerHTML = `
+          <strong>Please answer all questions.</strong><br/>
+          You still have <strong>${unanswered}</strong> unanswered.
+        `;
+        feedbackBox.classList.add("hidden");
+        return;
+      }
+
+      const score = scoreQuiz(answers);
+      const percent = Math.round((score / questionsData.length) * 100);
+
+      resultBox.classList.remove("hidden");
+
+      let msg = "";
+      if(percent >= 90) msg = "Excellent awareness — keep it up!";
+      else if(percent >= 70) msg = "Good job — a few improvements will make you even safer.";
+      else msg = "Good start — review phishing signs and try again.";
+
+      resultBox.style.background = percent >= 70 ? "rgba(120,255,170,.16)" : "rgba(255,120,120,.16)";
+      resultBox.innerHTML = `
+        <div>
+          <strong>Your Score:</strong> ${score}/20
+          <span class="badge">${percent}%</span>
+        </div>
+        <div style="margin-top:8px; color: rgba(255,255,255,.9);">${msg}</div>
+      `;
+
+      feedbackBox.classList.remove("hidden");
+      feedbackEmailBtn.href = buildFeedbackEmail(score, answers);
+      // Scroll to results for better UX
+      resultBox.scrollIntoView({behavior:"smooth", block:"start"});
+    });
+
+    resetBtn.addEventListener("click", () => {
+      quizForm.reset();
+      resultBox.classList.add("hidden");
+      feedbackBox.classList.add("hidden");
+      window.scrollTo({top:0, behavior:"smooth"});
+    });
+
+    renderQuestions();
+  </script>
+</body>
+</html>
