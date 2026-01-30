@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ShildGuard | Contact</title>
+
+<style>
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #2b1b5a, #0b2a6b);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+  }
+
+  .container{
+    background: rgba(255,255,255,0.08);
+    padding:40px;
+    border-radius:18px;
+    max-width:700px;
+    width:95%;
+    box-shadow:0 0 40px rgba(0,0,0,0.4);
+  }
+
+  .topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:18px;
+  }
+
+  .brand{ font-weight:bold; font-size:18px; }
+
+  .nav a{
+    display:inline-block;
+    margin-left:8px;
+    padding:10px 14px;
+    background: rgba(255,255,255,0.12);
+    border-radius:10px;
+    text-decoration:none;
+    color:white;
+    font-weight:bold;
+  }
+
+  .nav a:hover{
+    background: rgba(255,255,255,0.20);
+  }
+
+  h1{ margin:0 0 10px 0; }
+
+  p{ line-height:1.6; }
+
+  input, textarea{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.08);
+    color:white;
+    outline:none;
+    margin:8px 0 14px 0;
+    font-size:16px;
+  }
+
+  textarea{ min-height:140px; resize:vertical; }
+
+  button{
+    padding:12px 18px;
+    background:#00bfff;
+    border:none;
+    color:white;
+    font-size:16px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+  }
+
+  button:hover{ background:#33ccff; }
+
+  .small{
+    opacity:0.85;
+    font-size:13px;
+    margin-top:12px;
+  }
+
+  .emailLink{
+    color:#7fe3ff;
+    text-decoration:none;
+    font-weight:bold;
+  }
+</style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">🛡️ ShildGuard</div>
+      <div class="nav">
+        <a href="index.html">Home</a>
+        <a href="mission.html">Mission</a>
+        <a href="quiz.html">Quiz</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+
+    <h1>Contact ShildGuard</h1>
+    <p>
+      People and organizations can contact ShildGuard for awareness sessions, training ideas, or questions.
+    </p>
+
+    <label for="name">Name</label>
+    <input id="name" type="text" placeholder="Your name" />
+
+    <label for="org">Organization (optional)</label>
+    <input id="org" type="text" placeholder="Company / school / team" />
+
+    <label for="msg">Message</label>
+    <textarea id="msg" placeholder="How can ShildGuard help?"></textarea>
+
+    <button id="sendBtn">Send Email</button>
+
+    <p class="small">
+      This will open your email app and send to:
+      <a class="emailLink" href="mailto:shildguard.supp@gmail.com">shildguard.supp@gmail.com</a>
+    </p>
+  </div>
+
+<script>
+  document.getElementById("sendBtn").addEventListener("click", () => {
+    const name = document.getElementById("name").value.trim();
+    const org  = document.getElementById("org").value.trim();
+    const msg  = document.getElementById("msg").value.trim();
+
+    const subject = encodeURIComponent("ShildGuard Contact");
+    const body = encodeURIComponent(
+      `Name: ${name || "-"}\n` +
+      `Organization: ${org || "-"}\n\n` +
+      `Message:\n${msg || "-"}\n`
+    );
+
+    window.location.href = `mailto:shildguard.supp@gmail.com?subject=${subject}&body=${body}`;
+  });
+</script>
+</body>
+</html>
