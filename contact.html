@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Contact | ShildGuard</title>
+
+<style>
+body{
+  margin:0;
+  min-height:100vh;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #2b1b5a, #0b2a6b);
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.container{
+  background: rgba(255,255,255,0.08);
+  padding:40px;
+  border-radius:18px;
+  width:90%;
+  max-width:600px;
+  box-shadow:0 0 40px rgba(0,0,0,0.4);
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.brand{
+  font-weight:bold;
+  font-size:18px;
+}
+
+.nav a{
+  margin-left:8px;
+  padding:8px 12px;
+  background: rgba(255,255,255,0.12);
+  color:white;
+  text-decoration:none;
+  border-radius:8px;
+  font-weight:bold;
+}
+
+.nav a:hover{
+  background: rgba(255,255,255,0.25);
+}
+
+h1{
+  margin-top:0;
+}
+
+input, textarea{
+  width:100%;
+  padding:12px;
+  margin-top:8px;
+  margin-bottom:15px;
+  border-radius:8px;
+  border:none;
+  background: rgba(255,255,255,0.15);
+  color:white;
+  font-size:16px;
+}
+
+textarea{
+  min-height:130px;
+}
+
+button{
+  padding:12px 22px;
+  background:#00bfff;
+  color:white;
+  border:none;
+  border-radius:8px;
+  font-size:16px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+button:hover{
+  background:#33ccff;
+}
+
+.small{
+  margin-top:15px;
+  font-size:13px;
+  opacity:0.85;
+}
+
+.email{
+  color:#7fe3ff;
+  font-weight:bold;
+  text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="topbar">
+    <div class="brand">🛡️ ShildGuard</div>
+    <div class="nav">
+      <a href="index.html">Home</a>
+      <a href="mission.html">Mission</a>
+      <a href="quiz.html">Quiz</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+
+  <h1>Contact ShildGuard</h1>
+
+  <p>People and organizations can contact ShildGuard for questions or collaboration.</p>
+
+  <label>Name</label>
+  <input id="name" type="text" placeholder="Your name">
+
+  <label>Organization (optional)</label>
+  <input id="org" type="text" placeholder="Company or school">
+
+  <label>Message</label>
+  <textarea id="msg" placeholder="How can we help?"></textarea>
+
+  <button id="sendBtn">Send Email</button>
+
+  <p class="small">
+    Sends to:
+    <a class="email" href="mailto:shildguard.supp@gmail.com">
+      shildguard.supp@gmail.com
+    </a>
+  </p>
+
+</div>
+
+<script>
+document.getElementById("sendBtn").addEventListener("click", function(){
+
+  const name = document.getElementById("name").value;
+  const org  = document.getElementById("org").value;
+  const msg  = document.getElementById("msg").value;
+
+  const subject = encodeURIComponent("ShildGuard Contact");
+  const body = encodeURIComponent(
+    "Name: " + name + "\n" +
+    "Organization: " + org + "\n\n" +
+    "Message:\n" + msg
+  );
+
+  window.location.href =
+    "mailto:shildguard.supp@gmail.com?subject=" +
+    subject + "&body=" + body;
+});
+</script>
+
+</body>
+</html>
