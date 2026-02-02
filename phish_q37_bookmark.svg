@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700">
+  <rect width="1200" height="700" fill="#fff7ff"></rect>
+  <rect x="60" y="60" width="1080" height="580" rx="18" fill="#fff" stroke="#f0bfff" stroke-width="3"></rect>
+
+  <text x="90" y="130" font-family="Arial" font-size="30" fill="#111">Use Bookmark / Type URL</text>
+
+  <rect x="90" y="190" width="1020" height="70" rx="14" fill="#fff0ff" stroke="#f0bfff"></rect>
+  <text x="120" y="235" font-family="Arial" font-size="24" fill="#111">Bookmark: https://login.microsoftonline.com</text>
+
+  <text x="90" y="340" font-family="Arial" font-size="22" fill="#555">
+    Best practice: use a trusted bookmark or type the official URL.
+  </text>
+</svg>
