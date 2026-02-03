@@ -1,650 +1,492 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ShildGuard | Quiz</title>
-  <style>
-    :root{
-      --bg1:#2b1b5a;
-      --bg2:#0b2a6b;
-      --card:rgba(255,255,255,.08);
-      --border:rgba(255,255,255,.18);
-      --text:#ffffff;
-      --muted:rgba(255,255,255,.85);
-      --accent:#00bfff;
-      --good:rgba(120,255,170,.18);
-      --warn:rgba(255,160,120,.18);
-    }
-    *{box-sizing:border-box}
-    body{
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-      margin:0;
-      font-family: Arial, sans-serif;
-      color:var(--text);
-      min-height:100vh;
-      background: linear-gradient(135deg, var(--bg1), var(--bg2));
-      padding:20px;
-    }
-    .container{ width:min(950px, 100%); margin:0 auto; }
+<title>Quiz | ShildGuard</title>
 
-    nav{
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      padding:12px 14px;
-      border:1px solid var(--border);
-      background:rgba(0,0,0,.12);
-      border-radius:14px;
-      margin-bottom:18px;
-    }
-    .logo{ font-weight:800; letter-spacing:.3px; }
-    .links{ display:flex; flex-wrap:wrap; gap:10px; }
-    .link{
-      color:var(--text);
-      text-decoration:none;
-      padding:9px 12px;
-      border-radius:12px;
-      border:1px solid transparent;
-      opacity:.95;
-    }
-    .link:hover{ border-color:var(--border); background:rgba(255,255,255,.10); }
+<style>
+body{
+  margin:0;
+  min-height:100vh;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #2b1b5a, #0b2a6b);
+  color:white;
+}
 
-    .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:18px;
-      box-shadow: 0 12px 40px rgba(0,0,0,.25);
-    }
-    h1{ margin:0 0 8px 0; font-size:clamp(24px, 3vw, 34px); }
-    p{ margin:0 0 12px 0; color:var(--muted); line-height:1.7; }
+/* ================= NAV BAR ================= */
 
-    .topRow{
-      display:flex; gap:10px; justify-content:space-between; align-items:center; flex-wrap:wrap;
-      margin: 10px 0 14px 0;
-    }
-    .pill{
-      display:inline-block;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background: rgba(0,0,0,.12);
-      font-weight:800;
-    }
+nav{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  padding-top:20px;
+}
 
-    .progressWrap{
-      width: 100%;
-      height: 10px;
-      border-radius:999px;
-      background: rgba(255,255,255,.12);
-      overflow:hidden;
-      border: 1px solid rgba(255,255,255,.10);
-      margin-bottom: 14px;
-    }
-    .progressBar{
-      height:100%;
-      width:0%;
-      background: rgba(0, 191, 255, .75);
-      transition: width .2s ease;
-    }
+.nav-container{
+  width:95%;
+  max-width:1100px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter: blur(8px);
+  border-radius:18px;
+  padding:14px 22px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:0 0 20px rgba(0,0,0,0.3);
+}
 
-    .questionBox{
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:14px;
-      background:rgba(0,0,0,.10);
-    }
-    .questionTitle{
-      margin:0 0 10px 0;
-      font-size:16px;
-      font-weight:800;
-    }
+.brand{
+  color:white;
+  font-weight:bold;
+  font-size:18px;
+}
 
-    .phishImg{
-      width:100%;
-      max-height:320px;
-      object-fit:contain;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.18);
-      background: rgba(0,0,0,.15);
-      margin: 10px 0 12px 0;
-    }
+.nav-links a{
+  color:white;
+  text-decoration:none;
+  margin-left:18px;
+  font-weight:500;
+}
 
-    .option{
-      display:block;
-      padding:10px 10px;
-      border-radius:12px;
-      cursor:pointer;
-      border:1px solid transparent;
-      background: rgba(255,255,255,.06);
-      margin: 8px 0;
-    }
-    .option:hover{ background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.14); }
-    .option input{ margin-right:10px; transform: translateY(1px); }
+.nav-links a:hover{
+  text-decoration:underline;
+}
 
-    .btnRow{
-      display:flex; gap:12px; flex-wrap:wrap;
-      margin-top:14px;
-    }
-    button, .btnLink{
-      appearance:none;
-      border:none;
-      cursor:pointer;
-      color:var(--text);
-      background: rgba(255,255,255,.16);
-      border:1px solid var(--border);
-      padding:12px 16px;
-      border-radius:12px;
-      font-weight:900;
-      transition:.15s ease;
-      text-decoration:none;
-      display:inline-block;
-    }
-    button:hover, .btnLink:hover{ transform: translateY(-1px); background: rgba(255,255,255,.22); }
-    button:disabled{ opacity:.55; cursor:not-allowed; transform:none; }
+.nav-links .active{
+  color:#00c8ff;
+}
 
-    .primary{
-      background: rgba(0,191,255,.35);
-      border-color: rgba(0,191,255,.55);
-    }
-    .primary:hover{ background: rgba(0,191,255,.45); }
+/* ================= PAGE CONTENT ================= */
 
-    .panel{
-      margin-top:12px;
-      padding:12px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.06);
-      line-height:1.6;
-      color: rgba(255,255,255,.92);
-    }
-    .ok{ background: var(--good); border-color: rgba(120,255,170,.28); }
-    .bad{ background: var(--warn); border-color: rgba(255,160,120,.28); }
+.container{
+  width:90%;
+  max-width:900px;
+  margin:60px auto;
+  background: rgba(255,255,255,0.08);
+  padding:50px;
+  border-radius:20px;
+  box-shadow:0 0 40px rgba(0,0,0,0.4);
+}
 
-    .result{
-      margin-top:16px;
-      padding:14px;
-      border-radius:14px;
-      border:1px solid var(--border);
-      background:rgba(0,0,0,.12);
-    }
-    .hidden{ display:none; }
-    .note{ font-size:13px; opacity:.85; margin-top:8px; }
-  </style>
+h1{
+  text-align:center;
+  margin-top:0;
+  font-size:36px;
+}
+
+p{
+  text-align:center;
+  font-size:17px;
+  margin-bottom:25px;
+  line-height:1.7;
+}
+
+.pills{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin: 10px 0 18px 0;
+}
+
+.pill{
+  display:inline-block;
+  padding:8px 12px;
+  border-radius:999px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.18);
+  font-weight:bold;
+}
+
+.progressWrap{
+  width:100%;
+  height:10px;
+  background: rgba(255,255,255,0.12);
+  border-radius:999px;
+  overflow:hidden;
+  margin-bottom:20px;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.progressBar{
+  height:100%;
+  width:0%;
+  background:#00c8ff;
+  transition: width .2s ease;
+}
+
+.questionBox{
+  border:1px solid rgba(255,255,255,0.18);
+  border-radius:14px;
+  padding:18px;
+  background: rgba(0,0,0,0.10);
+}
+
+.qTitle{
+  font-weight:bold;
+  font-size:18px;
+  margin:0 0 12px 0;
+}
+
+.option{
+  display:block;
+  padding:12px;
+  border-radius:12px;
+  margin:10px 0;
+  background: rgba(255,255,255,0.10);
+  cursor:pointer;
+}
+
+.option:hover{
+  background: rgba(255,255,255,0.16);
+}
+
+.option input{
+  margin-right:10px;
+}
+
+.explain{
+  margin-top:16px;
+  padding:14px;
+  border-radius:12px;
+  background: rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.18);
+  line-height:1.6;
+}
+
+.btnRow{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:22px;
+  justify-content:center;
+}
+
+button, .btnLink{
+  padding:12px 22px;
+  background:#00c8ff;
+  color:white;
+  border:none;
+  border-radius:10px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-block;
+}
+
+button:hover, .btnLink:hover{
+  background:#29d6ff;
+}
+
+button.secondary{
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.20);
+}
+
+button.secondary:hover{
+  background: rgba(255,255,255,0.20);
+}
+
+button:disabled{
+  opacity:0.55;
+  cursor:not-allowed;
+}
+
+.resultBox{
+  margin-top:26px;
+  padding:18px;
+  border-radius:14px;
+  background: rgba(0,0,0,0.12);
+  border:1px solid rgba(255,255,255,0.18);
+  text-align:center;
+}
+
+.hidden{ display:none; }
+</style>
 </head>
 
 <body>
-  <div class="container">
-    <nav>
-      <div class="logo">🛡️ ShildGuard</div>
-      <div class="links">
-        <a class="link" href="index.html">Home</a>
-        <a class="link" href="mission.html">Mission</a>
-        <a class="link" href="quiz.html">Quiz</a>
-        <a class="link" href="contact.html">Contact</a>
-      </div>
-    </nav>
 
-    <section class="card">
-      <h1>Cybersecurity Awareness Quiz</h1>
-      <p>One question at a time. After you click Next, the answer locks and you can read the explanation.</p>
+<!-- ================= NAV BAR ================= -->
+<nav>
+  <div class="nav-container">
+    <div class="brand">🛡️ ShildGuard</div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="mission.html">Mission</a>
+      <a href="quiz.html" class="active">Quiz</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</nav>
 
-      <div class="topRow">
-        <div class="pill" id="counterPill">Question 1/60</div>
-        <div class="pill" id="statusPill">0/60 answered</div>
-      </div>
+<!-- ================= MAIN CONTENT ================= -->
+<div class="container">
 
-      <div class="progressWrap">
-        <div class="progressBar" id="progressBar"></div>
-      </div>
+  <h1>Awareness Quiz</h1>
+  <p>Answer one question at a time. After you click Next, your answer locks and you can read the explanation.</p>
 
-      <div class="questionBox" id="questionBox"></div>
-
-      <div class="btnRow">
-        <button id="backBtn" type="button">Back</button>
-        <button id="nextBtn" type="button" class="primary">Next</button>
-        <button id="submitBtn" type="button" class="primary hidden">Submit</button>
-        <button id="restartBtn" type="button">Restart</button>
-      </div>
-
-      <div id="resultBox" class="result hidden" aria-live="polite"></div>
-
-      <div id="feedbackBox" class="result hidden">
-        <h2 style="margin:0 0 8px 0; font-size:18px;">Was this quiz helpful?</h2>
-        <p style="margin:0 0 10px 0;">
-          Your feedback helps people and organizations improve awareness.
-        </p>
-        <a id="feedbackEmailBtn" class="btnLink" href="#">Send Feedback (Email)</a>
-        <div class="note">Opens your email app and sends to <strong>shildguard.supp@gmail.com</strong>.</div>
-      </div>
-
-      <div class="note">
-      </div>
-    </section>
+  <div class="pills">
+    <div class="pill" id="counterPill">Question 1/20</div>
+    <div class="pill" id="statusPill">0/20 answered</div>
   </div>
 
+  <div class="progressWrap"><div class="progressBar" id="progressBar"></div></div>
+
+  <div class="questionBox" id="questionBox"></div>
+
+  <div class="btnRow">
+    <button id="backBtn" class="secondary" type="button">Back</button>
+    <button id="nextBtn" type="button">Next</button>
+    <button id="submitBtn" type="button" class="hidden">Submit</button>
+    <button id="restartBtn" class="secondary" type="button">Restart</button>
+  </div>
+
+  <div id="resultBox" class="resultBox hidden"></div>
+
+  <div id="feedbackBox" class="resultBox hidden">
+    <h2 style="margin:0 0 10px 0;">Was this quiz helpful?</h2>
+    <p style="margin:0 0 16px 0;">Your feedback helps improve awareness for people and organizations.</p>
+    <a id="feedbackEmailBtn" class="btnLink" href="#">Send Feedback</a>
+  </div>
+
+</div>
+
 <script>
-  // ===== Quiz data (60) =====
-  // 10 questions include "img" which points to your /images/*.svg files
-  const questionsData = [
-    { q:"What is phishing?", options:["A firewall system","Tricking users into giving information","Antivirus scanning","Data backup"], a:1,
-      exp:"Phishing uses deception to steal sensitive data like passwords, MFA codes, or card numbers." },
+// ===== Replace this array with your full 60 questions if you want.
+// For now I’m keeping 20 (easy to expand). Add more objects the same way.
+const questionsData = [
+  { q:"What is phishing?", options:["A firewall system","Tricking users into giving information","Antivirus scanning","Data backup"], a:1,
+    exp:"Phishing uses deception to steal sensitive data like passwords, card numbers, or MFA codes." },
 
-    { q:"Which is a common sign of phishing?", options:["Correct grammar","Urgent message","Official domain","Personalized name"], a:1,
-      exp:"Attackers create urgency so victims act without verifying first.",
-      img:"images/phish_q2_urgent.svg" },
+  { q:"Which is a common sign of phishing?", options:["Correct grammar","Urgent message","Official domain","Personalized name"], a:1,
+    exp:"Urgency is used to pressure victims to act without thinking." },
 
-    { q:"What is smishing?", options:["Email scam","SMS scam","Phone call scam","Wi-Fi attack"], a:1,
-      exp:"Smishing is phishing through SMS/text messages." },
+  { q:"What is smishing?", options:["Email scam","SMS scam","Phone call scam","Wi-Fi attack"], a:1,
+    exp:"Smishing is phishing delivered by SMS/text messages." },
 
-    { q:"What is vishing?", options:["Voice phishing","Video hacking","VPN attack","Malware"], a:0,
-      exp:"Vishing uses phone calls instead of emails." },
+  { q:"What is vishing?", options:["Voice phishing","Video hacking","VPN attack","Malware"], a:0,
+    exp:"Vishing is phishing through phone calls and voice communication." },
 
-    { q:"What should never be shared by phone?", options:["Name","Password","Job title","Department"], a:1,
-      exp:"Legitimate companies never ask for passwords." },
+  { q:"What should never be shared by phone?", options:["Name","Password","Job title","Department"], a:1,
+    exp:"Legitimate support teams should never ask for your password." },
 
-    { q:"Credential harvesting is:", options:["Storing passwords","Stealing login credentials","Encrypting data","Deleting accounts"], a:1,
-      exp:"Attackers collect usernames and passwords using fake pages or prompts." },
+  { q:"Credential harvesting is:", options:["Storing passwords","Stealing login credentials","Encrypting data","Deleting accounts"], a:1,
+    exp:"Attackers collect usernames/passwords using fake pages or prompts." },
 
-    { q:"What is social engineering?", options:["Programming","Manipulating people","Encrypting files","Scanning networks"], a:1,
-      exp:"It exploits human behavior rather than technical flaws." },
+  { q:"What is social engineering?", options:["Programming","Manipulating people","Encrypting files","Scanning networks"], a:1,
+    exp:"It exploits human behavior and trust rather than technical weaknesses." },
 
-    { q:"Authority means attacker pretends to be:", options:["Friend","Boss/IT/Police","Student","Gamer"], a:1,
-      exp:"People often comply with authority figures under pressure." },
+  { q:"Pretexting is:", options:["Virus","Fake story","Encryption","Backup"], a:1,
+    exp:"Pretexting is creating a believable scenario to obtain information or access." },
 
-    { q:"Pretexting is:", options:["Virus","Fake story","Encryption","Backup"], a:1,
-      exp:"Pretexting is inventing a believable scenario to extract information." },
+  { q:"Baiting example:", options:["Free USB labeled “Salaries”","Firewall","Patch update","Password change"], a:0,
+    exp:"Baiting uses curiosity/temptation to lure victims into unsafe actions." },
 
-    { q:"Baiting example:", options:["Free USB labeled “Salaries”","Firewall","Patch update","Password change"], a:0,
-      exp:"Baiting uses curiosity to lure victims into unsafe actions." },
+  { q:"What does 2FA/MFA do?", options:["Removes passwords","Adds an extra verification step","Speeds up login","Disables antivirus"], a:1,
+    exp:"MFA adds another factor so a stolen password alone is not enough." },
 
-    { q:"Tailgating is:", options:["Phishing email","Following into restricted area","Malware","VPN"], a:1,
-      exp:"An attacker enters behind an authorized person without proper access." },
+  { q:"Unexpected password reset email — best action?", options:["Click the link","Reply","Ignore forever","Go to the site/app manually"], a:3,
+    exp:"Avoid email links. Use a trusted bookmark or type the official URL." },
 
-    { q:"Shoulder surfing:", options:["Packet sniffing","Watching someone type","Phishing","Brute force"], a:1,
-      exp:"Attackers visually steal credentials by watching someone enter them." },
+  { q:"Safest way to check a link?", options:["Hover/preview it","Click it quickly","Reply to ask","Share it"], a:0,
+    exp:"Previewing the URL helps you spot lookalike or suspicious domains." },
 
-    { q:"USB drops are dangerous because:", options:["Old tech","Can contain malware","Slow","Cheap"], a:1,
-      exp:"Plugging unknown USBs can infect systems or run malicious payloads." },
+  { q:"Why avoid password reuse?", options:["It slows typing","One breach can compromise many accounts","It breaks Wi-Fi","It disables MFA"], a:1,
+    exp:"Attackers use leaked passwords on other sites (credential stuffing)." },
 
-    { q:"Who is responsible for cybersecurity?", options:["IT only","Managers only","Everyone","Hackers"], a:2,
-      exp:"Every person is part of the security defense." },
+  { q:"A CEO asks you to buy gift cards urgently. Likely:", options:["Normal","CEO impersonation scam","HR request","Legal audit"], a:1,
+    exp:"Urgent gift card requests are a common business email scam." },
 
-    { q:"Security awareness training:", options:["Optional","Teaches threats and prevention","Antivirus","Backup"], a:1,
-      exp:"It educates users about risks and safer decisions." },
+  { q:"What is spear phishing?", options:["Mass phishing","Targeted phishing","Only phone scams","A virus"], a:1,
+    exp:"Spear phishing is customized and aimed at a specific person/org." },
 
-    { q:"Why do phishing emails create urgency?", options:["Look nice","Pressure victims","Save bandwidth","Encrypt data"], a:1,
-      exp:"Urgency reduces rational thinking and increases mistakes." },
+  { q:"Why are attachments risky?", options:["Large size","Can hide malware","Slow internet","Ugly formatting"], a:1,
+    exp:"Attachments can contain malware, scripts, or disguised executables." },
 
-    { q:"Unexpected password reset email — what to do?", options:["Click link","Reply","Delete account","Go to site manually"], a:3,
-      exp:"Avoid email links. Go to the official site/app manually and verify there.",
-      img:"images/phish_q17_passwordreset.svg" },
+  { q:"Which emotion is commonly exploited?", options:["Joy","Fear/Urgency","Calm","Pride"], a:1,
+    exp:"Fear and urgency push fast decisions without verification." },
 
-    { q:"What should you verify first in email?", options:["Font","Sender address","Signature","Logo"], a:1,
-      exp:"Attackers spoof display names; checking the real sender address/domain is key.",
-      img:"images/phish_q18_senderaddress.svg" },
-    { q:"What is the safest action if you are unsure whether a message is legitimate?",
-      options:["Ignore it forever","Click the link to see what happens","Verify through a trusted channel (official website or IT support)","Reply asking for more details"],
-      a:2,
-      exp:"When in doubt, verify using a trusted source such as an official website, bookmarked portal, or your organization’s IT/security team instead of interacting with the message." },
+  { q:"What should you do if you think you clicked a malicious link at work?", options:["Ignore","Disconnect & report to IT/security","Share with coworkers","Try again"], a:1,
+    exp:"Report quickly so security can contain and protect others." },
 
-    { q:"Why impersonate big brands?", options:["Easier coding","Users trust them","Cheaper","Faster"], a:1,
-      exp:"Users trust familiar brands, so scams succeed more often." },
+  { q:"Safest action if unsure whether a message is legitimate?", options:["Ignore forever","Click to see what happens","Verify via official channel/IT support","Reply asking details"], a:2,
+    exp:"When in doubt, verify using trusted contact info and official channels." }
+];
 
-    { q:"Mismatched sender name and address means:", options:["Normal","Secure","Suspicious","Encrypted"], a:2,
-      exp:"If the display name looks legit but the address is strange, it’s a red flag.",
-      img:"images/phish_q20_mismatch.svg" },
+// ===== State =====
+let currentIndex = 0;
+const answers = new Array(questionsData.length).fill(null);
+const stage = new Array(questionsData.length).fill("answer"); // answer -> review
 
-    { q:"What is spear phishing?", options:["Mass phishing","Targeted phishing","Phone scam","Virus"], a:1,
-      exp:"Spear phishing targets a specific person or organization using tailored details." },
+// ===== Elements =====
+const questionBox = document.getElementById("questionBox");
+const counterPill = document.getElementById("counterPill");
+const statusPill  = document.getElementById("statusPill");
+const progressBar = document.getElementById("progressBar");
 
-    { q:"Why are attachments risky?", options:["Large size","Can hide malware","Slow","Ugly"], a:1,
-      exp:"Attachments can contain malware (macros/scripts) or disguised executable files.",
-      img:"images/phish_q22_attachment.svg" },
+const backBtn   = document.getElementById("backBtn");
+const nextBtn   = document.getElementById("nextBtn");
+const submitBtn = document.getElementById("submitBtn");
+const restartBtn= document.getElementById("restartBtn");
 
-    { q:"Safest way to check a link:", options:["Hover over it","Click it","Reply","Share"], a:0,
-      exp:"Hover/preview reveals the real URL so you can spot lookalike domains.",
-      img:"images/phish_q23_hoverlink.svg" },
+const resultBox  = document.getElementById("resultBox");
+const feedbackBox= document.getElementById("feedbackBox");
+const feedbackEmailBtn = document.getElementById("feedbackEmailBtn");
 
-    { q:"Why are phone scams effective?", options:["Encryption","Human trust","Faster network","Automation"], a:1,
-      exp:"Scammers use trust, urgency, and pressure to manipulate decisions." },
+function answeredCount(){ return answers.filter(v => v !== null).length; }
 
-    { q:"Caller claims to be IT. You should:", options:["Give password","Hang up & verify","Install software","Continue"], a:1,
-      exp:"End the call and verify using official contact info, not what the caller provides." },
+function render(){
+  const total = questionsData.length;
+  const q = questionsData[currentIndex];
+  const isLast = currentIndex === total - 1;
 
-    { q:"Safest action after smishing SMS:", options:["Click","Reply","Delete & report","Forward"], a:2,
-      exp:"Don’t click or reply—delete and report if possible." },
+  counterPill.textContent = `Question ${currentIndex + 1}/${total}`;
+  statusPill.textContent  = `${answeredCount()}/${total} answered`;
 
-    { q:"Why spoof phone numbers?", options:["Quality","Look legitimate","Speed","Cost"], a:1,
-      exp:"Spoofing makes the call appear trusted to reduce suspicion." },
+  const progress = Math.round((currentIndex / Math.max(1,(total - 1))) * 100);
+  progressBar.style.width = `${progress}%`;
 
-    { q:"Verify caller by:", options:["Asking name","Calling official number","Trusting voice","Continuing"], a:1,
-      exp:"Use an official number (website/helpdesk), not the one provided by the caller." },
+  backBtn.disabled = currentIndex === 0;
 
-    { q:"Why scammers keep victims talking?", options:["Fun","Gather info","Better sound","Bored"], a:1,
-      exp:"They gather details for identity verification or more convincing follow-up attacks." },
+  nextBtn.textContent = (stage[currentIndex] === "answer") ? "Next" : "Next Question";
 
-    { q:"Caller ID spoofing means:", options:["Blocking calls","Fake number shown","Encryption","Recording"], a:1,
-      exp:"The displayed caller number is forged to appear legitimate." },
-
-    { q:"Why HTTPS doesn't guarantee safety?", options:["Slow","Anyone can get certificates","Old","Weak"], a:1,
-      exp:"HTTPS encrypts traffic but doesn’t prove the site is legitimate.",
-      img:"images/phish_q31_https.svg" },
-
-    { q:"Sign of fake login page:", options:["Logo","Slightly wrong URL","Password box","HTTPS"], a:1,
-      exp:"Look carefully for misspellings, extra words, or wrong domains in the URL.",
-      img:"images/phish_q32_wrongurl.svg" },
-
-    { q:"Why avoid email login links?", options:["Slow","Phishing risk","Ads","Cookies"], a:1,
-      exp:"Email links can lead to fake pages. Use a bookmark or type the URL yourself.",
-      img:"images/phish_q33_emaillink.svg" },
-
-    { q:"How MFA helps:", options:["Encrypts files","Adds extra verification","Removes passwords","Blocks Wi-Fi"], a:1,
-      exp:"MFA requires another factor, so a stolen password alone isn’t enough." },
-
-    { q:"After credentials stolen attacker may:", options:["Fix bug","Access accounts","Log out","Encrypt PC"], a:1,
-      exp:"They can log in, steal data, and even send phishing from your account." },
-
-    { q:"Why fake pages look real?", options:["Magic","Templates","Stolen designs","Guessing"], a:2,
-      exp:"Attackers copy branding/layout to reduce suspicion." },
-
-    { q:"Safest way to reach login page:", options:["Email link","Bookmark","SMS","Pop-up"], a:1,
-      exp:"Use a trusted bookmark or type the official URL manually.",
-      img:"images/phish_q37_bookmark.svg" },
-
-    // ===== Remaining questions (38–60) with explanations (no images) =====
-    { q:"Password manager benefit:", options:["Reuse passwords","Generate strong passwords","Share passwords","Remove MFA"], a:1,
-      exp:"Password managers generate unique strong passwords and reduce reuse." },
-
-    { q:"Most exploited emotion:", options:["Joy","Anger","Fear/Urgency","Pride"], a:2,
-      exp:"Fear/urgency pushes quick decisions without verification." },
-
-    { q:"Quid pro quo means:", options:["Threat","Exchange favor","Virus","Backup"], a:1,
-      exp:"The attacker offers something in exchange for info/actions." },
-
-    { q:"Why research victims?", options:["Fun","Convincing attacks","Required","Legal"], a:1,
-      exp:"Personal details make attacks more believable and targeted." },
-
-    { q:"Curiosity increases risk because:", options:["Slows PC","Leads to clicking","Encrypts data","Blocks firewall"], a:1,
-      exp:"Curiosity drives people to click unknown links/open files." },
-
-    { q:"Why target employees?", options:["Cheap","Humans make mistakes","Faster PCs","Better Wi-Fi"], a:1,
-      exp:"Humans can be tricked more easily than systems." },
-
-    { q:"Someone asks to hold secure door:", options:["Hold it","Ask for badge","Ignore","Run"], a:1,
-      exp:"Verify identity. Tailgating is a common physical intrusion method." },
-
-    { q:"Visitor badges important because:", options:["Fashion","Identify authorized people","Marketing","Colorful"], a:1,
-      exp:"Badges help confirm who belongs in restricted areas." },
-
-    { q:"Why impersonate trusted brands?", options:["Faster email","Higher trust success","Easier coding","Cheaper"], a:1,
-      exp:"Trust lowers suspicion and raises success rates." },
-
-    { q:"Why padlock icon doesn’t guarantee safety?", options:["Fake","Encrypts connection not legitimacy","Outdated","Weak"], a:1,
-      exp:"Encryption doesn’t prove the site is the real company." },
-
-    { q:"How MFA helps if password stolen?", options:["Changes password","Requires second factor","Blocks Wi-Fi","Deletes account"], a:1,
-      exp:"The attacker still needs your second factor to log in." },
-
-    { q:"After attacker steals credentials:", options:["Nothing","Lateral movement, data theft","Antivirus install","Logout"], a:1,
-      exp:"They may pivot across systems and steal or ransom data." },
-
-    { q:"Man-in-the-middle attack:", options:["Virus","Intercepting communication","Brute force","Spam"], a:1,
-      exp:"A MITM attacker intercepts traffic between you and a service." },
-
-    { q:"Why urgency and fear work?", options:["Fun","Override rational thinking","Faster internet","Encryption"], a:1,
-      exp:"Strong emotions reduce verification and increase errors." },
-
-    { q:"Combining techniques means:", options:["One attack only","Phishing + vishing + pretext","Antivirus","Patch"], a:1,
-      exp:"Attackers chain methods to increase success." },
-
-    { q:"Why report small incidents?", options:["Punishment","Detect patterns early","Waste time","Blame"], a:1,
-      exp:"Early reports help stop campaigns and protect others." },
-
-    { q:"Password reuse risk:", options:["Faster login","One breach compromises many accounts","Safer","Encrypted"], a:1,
-      exp:"Attackers reuse leaked passwords across sites (credential stuffing)." },
-
-    { q:"Humans weakest link because:", options:["Slow","Emotional & fallible","Cheap","No updates"], a:1,
-      exp:"People can be manipulated, rushed, or tricked into mistakes." },
-
-    { q:"Social media helps attackers by:", options:["Entertainment","Gathering personal info","Encryption","Blocking access"], a:1,
-      exp:"Public info enables targeted phishing and impersonation." },
-
-    { q:"Evil twin Wi-Fi:", options:["Strong Wi-Fi","Fake access point","VPN","Firewall"], a:1,
-      exp:"A fake hotspot mimics a real one to capture traffic/credentials." },
-
-    { q:"Why regular training matters?", options:["Fun","Threats evolve","Marketing","Decoration"], a:1,
-      exp:"Attack techniques change; training keeps awareness current." },
-
-    { q:"After clicking malicious link best action:", options:["Ignore","Disconnect & report","Share","Retry"], a:1,
-      exp:"Report immediately and follow incident steps; disconnect if needed." },
-  ];
-
-  // ===== State =====
-  let currentIndex = 0;
-  const answers = new Array(questionsData.length).fill(null);
-
-  // stage per question:
-  // "answer" => selecting answer
-  // "review" => answer locked, showing correct answer + explanation
-  const stage = new Array(questionsData.length).fill("answer");
-
-  // ===== Elements =====
-  const questionBox = document.getElementById("questionBox");
-  const counterPill = document.getElementById("counterPill");
-  const statusPill  = document.getElementById("statusPill");
-  const progressBar = document.getElementById("progressBar");
-
-  const backBtn   = document.getElementById("backBtn");
-  const nextBtn   = document.getElementById("nextBtn");
-  const submitBtn = document.getElementById("submitBtn");
-  const restartBtn= document.getElementById("restartBtn");
-
-  const resultBox  = document.getElementById("resultBox");
-  const feedbackBox= document.getElementById("feedbackBox");
-  const feedbackEmailBtn = document.getElementById("feedbackEmailBtn");
-
-  function answeredCount(){
-    return answers.filter(v => v !== null).length;
+  // submit only when last AND in review stage
+  if(isLast && stage[currentIndex] === "review"){
+    submitBtn.classList.remove("hidden");
+    nextBtn.classList.add("hidden");
+  } else {
+    submitBtn.classList.add("hidden");
+    nextBtn.classList.remove("hidden");
   }
 
-  function render(){
-    const total = questionsData.length;
-    const q = questionsData[currentIndex];
-
-    counterPill.textContent = `Question ${currentIndex + 1}/${total}`;
-    statusPill.textContent = `${answeredCount()}/${total} answered`;
-
-    const progress = Math.round((currentIndex / (total - 1)) * 100);
-    progressBar.style.width = `${progress}%`;
-
-    backBtn.disabled = currentIndex === 0;
-
-    // last question controls
-    const isLast = currentIndex === total - 1;
-
-    // show submit only when last question AND stage is review (so they read explanation first)
-    if(isLast && stage[currentIndex] === "review"){
-      submitBtn.classList.remove("hidden");
-      nextBtn.classList.add("hidden");
-    } else {
-      submitBtn.classList.add("hidden");
-      nextBtn.classList.remove("hidden");
-    }
-
-    // Next button label depends on stage
-    nextBtn.textContent = (stage[currentIndex] === "answer") ? "Next" : "Next Question";
-
-    // Build image HTML if exists
-    let imgHtml = "";
-    if(q.img){
-      imgHtml = `<img class="phishImg" src="${q.img}" alt="Phishing screenshot example">`;
-    }
-
-    // Build options
-    let optionsHtml = `<div role="radiogroup" aria-label="answer choices">`;
-    q.options.forEach((opt, i) => {
-      const checked = (answers[currentIndex] === i) ? "checked" : "";
-      const disabled = (stage[currentIndex] === "review") ? "disabled" : "";
-      optionsHtml += `
-        <label class="option">
-          <input type="radio" name="opt" value="${i}" ${checked} ${disabled}>
-          ${opt}
-        </label>
-      `;
-    });
-    optionsHtml += `</div>`;
-
-    // Explanation panel (only when in review stage)
-    let explainHtml = "";
-    if(stage[currentIndex] === "review"){
-      const correct = q.options[q.a];
-      const isCorrect = answers[currentIndex] === q.a;
-      const panelClass = isCorrect ? "panel ok" : "panel bad";
-      explainHtml = `
-        <div class="${panelClass}">
-          <strong>Correct answer:</strong> ${correct}<br>
-          <strong>Explanation:</strong> ${q.exp}
-        </div>
-      `;
-    }
-
-    questionBox.innerHTML = `
-      <div class="questionTitle">${currentIndex + 1}) ${q.q}</div>
-      ${imgHtml}
-      ${optionsHtml}
-      ${explainHtml}
+  // options
+  let optionsHtml = "";
+  q.options.forEach((opt, i) => {
+    const checked = (answers[currentIndex] === i) ? "checked" : "";
+    const disabled = (stage[currentIndex] === "review") ? "disabled" : "";
+    optionsHtml += `
+      <label class="option">
+        <input type="radio" name="opt" value="${i}" ${checked} ${disabled}>
+        ${opt}
+      </label>
     `;
+  });
 
-    // Hide end screens while navigating
-    resultBox.classList.add("hidden");
-    feedbackBox.classList.add("hidden");
+  let explainHtml = "";
+  if(stage[currentIndex] === "review"){
+    const correctText = q.options[q.a];
+    const isCorrect = answers[currentIndex] === q.a;
+    explainHtml = `
+      <div class="explain" style="${isCorrect ? '' : ''}">
+        <strong>Correct Answer:</strong> ${correctText}<br>
+        <strong>Explanation:</strong> ${q.exp}
+      </div>
+    `;
   }
 
-  function captureSelection(){
-    const picked = document.querySelector('input[name="opt"]:checked');
-    answers[currentIndex] = picked ? Number(picked.value) : null;
-  }
+  questionBox.innerHTML = `
+    <div class="qTitle">${currentIndex + 1}) ${q.q}</div>
+    ${optionsHtml}
+    ${explainHtml}
+  `;
 
-  // Click Next behavior:
-  // If in "answer" => require answer, then switch to "review" (LOCK + show explanation)
-  // If in "review" => go to next question and set its stage to answer (or keep existing)
-  nextBtn.addEventListener("click", () => {
-    if(stage[currentIndex] === "answer"){
-      captureSelection();
-      if(answers[currentIndex] === null){
-        alert("Please select an answer before continuing.");
-        return;
-      }
-      stage[currentIndex] = "review"; // lock and show explanation
-      render();
+  resultBox.classList.add("hidden");
+  feedbackBox.classList.add("hidden");
+}
+
+function captureSelection(){
+  const picked = document.querySelector('input[name="opt"]:checked');
+  answers[currentIndex] = picked ? Number(picked.value) : null;
+}
+
+nextBtn.addEventListener("click", () => {
+  if(stage[currentIndex] === "answer"){
+    captureSelection();
+    if(answers[currentIndex] === null){
+      alert("Please select an answer before continuing.");
       return;
     }
-
-    // stage is review => move forward
-    if(currentIndex < questionsData.length - 1){
-      currentIndex++;
-      render();
-    }
-  });
-
-  backBtn.addEventListener("click", () => {
-    // going back keeps whatever stage they were in (answer or review)
-    if(currentIndex > 0){
-      currentIndex--;
-      render();
-    }
-  });
-
-  restartBtn.addEventListener("click", () => {
-    if(confirm("Restart the quiz? Your answers will be cleared.")){
-      for(let i=0;i<answers.length;i++) answers[i]=null;
-      for(let i=0;i<stage.length;i++) stage[i]="answer";
-      currentIndex = 0;
-      render();
-    }
-  });
-
-  function scoreQuiz(){
-    let score = 0;
-    for(let i=0;i<questionsData.length;i++){
-      if(answers[i] !== null && answers[i] === questionsData[i].a) score++;
-    }
-    return score;
+    stage[currentIndex] = "review"; // lock + show explanation
+    render();
+    return;
   }
 
-  function buildFeedbackEmail(score){
-    const total = questionsData.length;
-    const percent = Math.round((score / total) * 100);
+  // review -> next question
+  if(currentIndex < questionsData.length - 1){
+    currentIndex++;
+    render();
+  }
+});
 
-    const missed = [];
-    for(let i=0;i<total;i++){
-      if(answers[i] !== questionsData[i].a) missed.push(i+1);
-    }
+backBtn.addEventListener("click", () => {
+  if(currentIndex > 0){
+    currentIndex--;
+    render();
+  }
+});
 
-    const subject = encodeURIComponent("ShildGuard Quiz Feedback");
-    const bodyLines = [
-      "Hi ShildGuard team,",
-      "",
-      "I completed the Cybersecurity Awareness Quiz.",
-      `Score: ${score}/${total} (${percent}%)`,
-      missed.length ? `Questions I struggled with: ${missed.join(", ")}` : "I got all questions correct.",
-      "",
-      "Was it helpful? (yes/no): ",
-      "Did you learn anything new from the test?: ",
-      "What should be improved?: ",
-      "",
-      "Thanks!"
-    ];
-    const body = encodeURIComponent(bodyLines.join("\n"));
-    return `mailto:shildguard.supp@gmail.com?subject=${subject}&body=${body}`;
+restartBtn.addEventListener("click", () => {
+  if(confirm("Restart the quiz? Your answers will be cleared.")){
+    for(let i=0;i<answers.length;i++) answers[i] = null;
+    for(let i=0;i<stage.length;i++) stage[i] = "answer";
+    currentIndex = 0;
+    render();
+  }
+});
+
+function scoreQuiz(){
+  let score = 0;
+  for(let i=0;i<questionsData.length;i++){
+    if(answers[i] === questionsData[i].a) score++;
+  }
+  return score;
+}
+
+function buildFeedbackEmail(score){
+  const total = questionsData.length;
+  const percent = Math.round((score / total) * 100);
+  const subject = encodeURIComponent("ShildGuard Quiz Feedback");
+  const body = encodeURIComponent(
+    `Hi ShildGuard team,\n\nI completed the quiz.\nScore: ${score}/${total} (${percent}%)\n\nWas it helpful? (yes/no): \nWhat should be improved?: \n\nThanks!`
+  );
+  return `mailto:shildguard.supp@gmail.com?subject=${subject}&body=${body}`;
+}
+
+submitBtn.addEventListener("click", () => {
+  const unanswered = answers.filter(v => v === null).length;
+  if(unanswered > 0){
+    alert(`You still have ${unanswered} unanswered question(s).`);
+    return;
   }
 
-  submitBtn.addEventListener("click", () => {
-    // Ensure all questions were answered + reviewed (locked)
-    const unanswered = answers.filter(v => v === null).length;
-    if(unanswered > 0){
-      alert(`You still have ${unanswered} unanswered question(s). Please complete them.`);
-      return;
-    }
+  const score = scoreQuiz();
+  const total = questionsData.length;
+  const percent = Math.round((score / total) * 100);
 
-    const score = scoreQuiz();
-    const total = questionsData.length;
-    const percent = Math.round((score / total) * 100);
+  resultBox.classList.remove("hidden");
+  resultBox.innerHTML = `<h2 style="margin:0 0 10px 0;">Your Score</h2>
+    <div style="font-size:20px; font-weight:bold;">${score}/${total} (${percent}%)</div>`;
 
-    let msg = "";
-    if(percent >= 90) msg = "Excellent awareness — keep it up!";
-    else if(percent >= 70) msg = "Good job — a few improvements will make you even safer.";
-    else msg = "Good start — review phishing signs and try again.";
+  feedbackBox.classList.remove("hidden");
+  feedbackEmailBtn.href = buildFeedbackEmail(score);
+  resultBox.scrollIntoView({behavior:"smooth"});
+});
 
-    progressBar.style.width = "100%";
-    statusPill.textContent = "Finished";
+// live capture only in answer stage
+questionBox.addEventListener("change", (e) => {
+  if(e.target && e.target.name === "opt" && stage[currentIndex] === "answer"){
+    answers[currentIndex] = Number(e.target.value);
+    statusPill.textContent = `${answeredCount()}/${questionsData.length} answered`;
+  }
+});
 
-    resultBox.classList.remove("hidden");
-    resultBox.innerHTML = `
-      <strong>Your Score:</strong> ${score}/${total} (${percent}%)<br>
-      <div style="margin-top:8px; color: rgba(255,255,255,.92);">${msg}</div>
-    `;
-
-    feedbackBox.classList.remove("hidden");
-    feedbackEmailBtn.href = buildFeedbackEmail(score);
-    resultBox.scrollIntoView({behavior:"smooth", block:"start"});
-  });
-
-  // Save selection live (only during answer stage)
-  questionBox.addEventListener("change", (e) => {
-    if(e.target && e.target.name === "opt" && stage[currentIndex] === "answer"){
-      answers[currentIndex] = Number(e.target.value);
-      statusPill.textContent = `${answeredCount()}/${questionsData.length} answered`;
-    }
-  });
-
-  // Start
-  render();
+render();
 </script>
 
 </body>
 </html>
-
-
-
-
