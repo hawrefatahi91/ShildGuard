@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Quiz | ShildGuard</title>
 
 <style>
@@ -16,7 +15,6 @@ body{
 }
 
 /* ================= NAV BAR ================= */
-
 nav{
   width:100%;
   display:flex;
@@ -59,7 +57,6 @@ nav{
 }
 
 /* ================= PAGE CONTENT ================= */
-
 .container{
   width:90%;
   max-width:900px;
@@ -227,12 +224,12 @@ button:disabled{
 <!-- ================= MAIN CONTENT ================= -->
 <div class="container">
 
-  <h1>Awareness Quiz</h1>
-  <p>Answer one question at a time. After you click Next, your answer locks and you can read the explanation.</p>
+  <h1>Cybersecurity Awareness Quiz</h1>
+  <p>30 questions in 6 areas (5 each). One question at a time. After you click Next, your answer locks and the explanation appears.</p>
 
   <div class="pills">
-    <div class="pill" id="counterPill">Question 1/20</div>
-    <div class="pill" id="statusPill">0/20 answered</div>
+    <div class="pill" id="counterPill">Question 1/30</div>
+    <div class="pill" id="statusPill">0/30 answered</div>
   </div>
 
   <div class="progressWrap"><div class="progressBar" id="progressBar"></div></div>
@@ -257,65 +254,79 @@ button:disabled{
 </div>
 
 <script>
-// ===== Replace this array with your full 60 questions if you want.
-// For now I’m keeping 20 (easy to expand). Add more objects the same way.
+// 30 questions, 6 areas x 5 questions each, with short explanations
 const questionsData = [
-  { q:"What is phishing?", options:["A firewall system","Tricking users into giving information","Antivirus scanning","Data backup"], a:1,
-    exp:"Phishing uses deception to steal sensitive data like passwords, card numbers, or MFA codes." },
+  // 1) Phishing & Email Security
+  { q:"What is phishing?", options:["Antivirus scanning","Tricking users into giving sensitive information","Data encryption","Firewall filtering"], a:1,
+    exp:"Phishing uses deception (emails/SMS/sites) to steal sensitive data like passwords or card numbers." },
+  { q:"Which is a common phishing indicator?", options:["Friendly greeting","Urgent language","No links","Correct spelling"], a:1,
+    exp:"Urgency pressures you to act quickly without verifying." },
+  { q:"What should you do before clicking a link in an email?", options:["Click fast","Forward to coworkers","Hover/preview the URL","Disable antivirus"], a:2,
+    exp:"Previewing the URL helps you spot lookalike domains and strange links." },
+  { q:"Unexpected attachment from an unknown sender — best action?", options:["Open it","Save it","Delete and report","Rename it"], a:2,
+    exp:"Unknown attachments can contain malware or harmful scripts; report it." },
+  { q:"What is spear phishing?", options:["Mass phishing","Phone scam","Targeted phishing","Virus"], a:2,
+    exp:"Spear phishing is customized and aimed at a specific person or organization." },
 
-  { q:"Which is a common sign of phishing?", options:["Correct grammar","Urgent message","Official domain","Personalized name"], a:1,
-    exp:"Urgency is used to pressure victims to act without thinking." },
+  // 2) Passwords & Authentication
+  { q:"Which password is strongest?", options:["Password123","Summer2024","P@ssword","9f#Q!Lk2@Zx8"], a:3,
+    exp:"Strong passwords are long, random, and unique." },
+  { q:"Why avoid password reuse?", options:["Slows login","One breach exposes many accounts","Uses more memory","Breaks Wi-Fi"], a:1,
+    exp:"If one site is breached, attackers try the same password elsewhere." },
+  { q:"What does MFA/2FA do?", options:["Removes passwords","Adds extra verification","Encrypts Wi-Fi","Blocks malware"], a:1,
+    exp:"MFA adds a second factor so a stolen password alone isn’t enough." },
+  { q:"Best place to store passwords?", options:["Sticky note","Browser only","Password manager","Email draft"], a:2,
+    exp:"Password managers store credentials securely and generate strong passwords." },
+  { q:"If your password is leaked, what should you do first?", options:["Ignore","Change the password","Post online","Reboot PC"], a:1,
+    exp:"Change the password immediately (and enable MFA if possible)." },
 
-  { q:"What is smishing?", options:["Email scam","SMS scam","Phone call scam","Wi-Fi attack"], a:1,
-    exp:"Smishing is phishing delivered by SMS/text messages." },
+  // 3) Social Engineering
+  { q:"Social engineering mainly targets:", options:["Hardware","Networks","People","Firewalls"], a:2,
+    exp:"It manipulates human behavior (trust, fear, curiosity)." },
+  { q:"Pretexting means:", options:["Malware","Fake story","Encryption","Backup"], a:1,
+    exp:"Pretexting uses a believable scenario to get information or access." },
+  { q:"Authority attacks involve pretending to be:", options:["A gamer","A stranger","A boss/IT/Police","A student"], a:2,
+    exp:"Attackers use authority to pressure victims into compliance." },
+  { q:"Baiting example:", options:["Patch update","Free USB drive","Firewall rule","Backup reminder"], a:1,
+    exp:"Baiting uses curiosity or temptation (e.g., USB drops) to lure victims." },
+  { q:"Tailgating refers to:", options:["Email scam","Entering behind someone into a secure area","USB infection","VPN attack"], a:1,
+    exp:"Tailgating is physical intrusion by following an authorized person." },
 
-  { q:"What is vishing?", options:["Voice phishing","Video hacking","VPN attack","Malware"], a:0,
-    exp:"Vishing is phishing through phone calls and voice communication." },
+  // 4) Malware & Ransomware
+  { q:"What is ransomware?", options:["Spyware","Locks files for payment","Firewall","Backup software"], a:1,
+    exp:"Ransomware encrypts/locks data and demands payment." },
+  { q:"Malware can spread through:", options:["Attachments","Fake websites","USB drives","All of the above"], a:3,
+    exp:"Malware spreads via many vectors: files, links, drives, downloads, etc." },
+  { q:"What is spyware?", options:["Antivirus","Tracks user activity secretly","VPN","Backup tool"], a:1,
+    exp:"Spyware collects data (keystrokes, browsing, credentials) without consent." },
+  { q:"Best defense against malware:", options:["Disable updates","Antivirus + updates","Public Wi-Fi","Reusing passwords"], a:1,
+    exp:"Patching and security tools reduce known vulnerabilities and infections." },
+  { q:"If ransomware infects your PC:", options:["Pay immediately","Disconnect and report","Ignore","Post online"], a:1,
+    exp:"Disconnect to limit spread and report to IT/security for response." },
 
-  { q:"What should never be shared by phone?", options:["Name","Password","Job title","Department"], a:1,
-    exp:"Legitimate support teams should never ask for your password." },
+  // 5) Safe Browsing & Devices
+  { q:"Safest way to access a website:", options:["Email link","Pop-up link","Bookmark or manual URL","Random search result"], a:2,
+    exp:"Bookmarks/manual URLs reduce the chance of landing on a fake site." },
+  { q:"HTTPS means:", options:["The site is trusted","The connection is encrypted","No malware exists","Government verified"], a:1,
+    exp:"HTTPS encrypts traffic but does not guarantee the site is legitimate." },
+  { q:"Public Wi-Fi risk:", options:["Faster speed","Man-in-the-middle attacks","Better encryption","No risk"], a:1,
+    exp:"Attackers can intercept traffic or trick users on unsafe networks." },
+  { q:"Before installing software, you should:", options:["Skip license","Verify the source","Disable antivirus","Share the link"], a:1,
+    exp:"Install from official/trusted sources to avoid tampered software." },
+  { q:"Why lock your screen?", options:["Save battery","Reduce shoulder surfing/unauthorized access","Faster boot","Hide wallpaper"], a:1,
+    exp:"Screen locks prevent someone nearby from accessing your device." },
 
-  { q:"Credential harvesting is:", options:["Storing passwords","Stealing login credentials","Encrypting data","Deleting accounts"], a:1,
-    exp:"Attackers collect usernames/passwords using fake pages or prompts." },
-
-  { q:"What is social engineering?", options:["Programming","Manipulating people","Encrypting files","Scanning networks"], a:1,
-    exp:"It exploits human behavior and trust rather than technical weaknesses." },
-
-  { q:"Pretexting is:", options:["Virus","Fake story","Encryption","Backup"], a:1,
-    exp:"Pretexting is creating a believable scenario to obtain information or access." },
-
-  { q:"Baiting example:", options:["Free USB labeled “Salaries”","Firewall","Patch update","Password change"], a:0,
-    exp:"Baiting uses curiosity/temptation to lure victims into unsafe actions." },
-
-  { q:"What does 2FA/MFA do?", options:["Removes passwords","Adds an extra verification step","Speeds up login","Disables antivirus"], a:1,
-    exp:"MFA adds another factor so a stolen password alone is not enough." },
-
-  { q:"Unexpected password reset email — best action?", options:["Click the link","Reply","Ignore forever","Go to the site/app manually"], a:3,
-    exp:"Avoid email links. Use a trusted bookmark or type the official URL." },
-
-  { q:"Safest way to check a link?", options:["Hover/preview it","Click it quickly","Reply to ask","Share it"], a:0,
-    exp:"Previewing the URL helps you spot lookalike or suspicious domains." },
-
-  { q:"Why avoid password reuse?", options:["It slows typing","One breach can compromise many accounts","It breaks Wi-Fi","It disables MFA"], a:1,
-    exp:"Attackers use leaked passwords on other sites (credential stuffing)." },
-
-  { q:"A CEO asks you to buy gift cards urgently. Likely:", options:["Normal","CEO impersonation scam","HR request","Legal audit"], a:1,
-    exp:"Urgent gift card requests are a common business email scam." },
-
-  { q:"What is spear phishing?", options:["Mass phishing","Targeted phishing","Only phone scams","A virus"], a:1,
-    exp:"Spear phishing is customized and aimed at a specific person/org." },
-
-  { q:"Why are attachments risky?", options:["Large size","Can hide malware","Slow internet","Ugly formatting"], a:1,
-    exp:"Attachments can contain malware, scripts, or disguised executables." },
-
-  { q:"Which emotion is commonly exploited?", options:["Joy","Fear/Urgency","Calm","Pride"], a:1,
-    exp:"Fear and urgency push fast decisions without verification." },
-
-  { q:"What should you do if you think you clicked a malicious link at work?", options:["Ignore","Disconnect & report to IT/security","Share with coworkers","Try again"], a:1,
-    exp:"Report quickly so security can contain and protect others." },
-
-  { q:"Safest action if unsure whether a message is legitimate?", options:["Ignore forever","Click to see what happens","Verify via official channel/IT support","Reply asking details"], a:2,
-    exp:"When in doubt, verify using trusted contact info and official channels." }
+  // 6) Incident Response & General Awareness
+  { q:"Who is responsible for cybersecurity?", options:["IT only","Managers only","Everyone","Hackers"], a:2,
+    exp:"Security is a shared responsibility; user actions matter." },
+  { q:"If you suspect phishing at work, you should:", options:["Reply","Delete only","Report and delete","Forward to friends"], a:2,
+    exp:"Reporting helps stop attacks and protects others." },
+  { q:"Why report small incidents?", options:["Blame users","Detect patterns early","Waste time","Entertainment"], a:1,
+    exp:"Early reporting helps security teams identify campaigns quickly." },
+  { q:"Why do attackers create urgency?", options:["Save time","Reduce rational thinking","Look professional","Encrypt data"], a:1,
+    exp:"Urgency pushes quick decisions and fewer checks." },
+  { q:"Safest action if unsure whether a message is legitimate:", options:["Click it","Reply","Verify via official channel/IT support","Ignore forever"], a:2,
+    exp:"Verify using trusted contact info and official channels before acting." }
 ];
 
 // ===== State =====
@@ -364,7 +375,6 @@ function render(){
     nextBtn.classList.remove("hidden");
   }
 
-  // options
   let optionsHtml = "";
   q.options.forEach((opt, i) => {
     const checked = (answers[currentIndex] === i) ? "checked" : "";
@@ -380,9 +390,8 @@ function render(){
   let explainHtml = "";
   if(stage[currentIndex] === "review"){
     const correctText = q.options[q.a];
-    const isCorrect = answers[currentIndex] === q.a;
     explainHtml = `
-      <div class="explain" style="${isCorrect ? '' : ''}">
+      <div class="explain">
         <strong>Correct Answer:</strong> ${correctText}<br>
         <strong>Explanation:</strong> ${q.exp}
       </div>
@@ -411,12 +420,11 @@ nextBtn.addEventListener("click", () => {
       alert("Please select an answer before continuing.");
       return;
     }
-    stage[currentIndex] = "review"; // lock + show explanation
+    stage[currentIndex] = "review"; // lock + explanation
     render();
     return;
   }
 
-  // review -> next question
   if(currentIndex < questionsData.length - 1){
     currentIndex++;
     render();
@@ -469,8 +477,10 @@ submitBtn.addEventListener("click", () => {
   const percent = Math.round((score / total) * 100);
 
   resultBox.classList.remove("hidden");
-  resultBox.innerHTML = `<h2 style="margin:0 0 10px 0;">Your Score</h2>
-    <div style="font-size:20px; font-weight:bold;">${score}/${total} (${percent}%)</div>`;
+  resultBox.innerHTML = `
+    <h2 style="margin:0 0 10px 0;">Your Score</h2>
+    <div style="font-size:20px; font-weight:bold;">${score}/${total} (${percent}%)</div>
+  `;
 
   feedbackBox.classList.remove("hidden");
   feedbackEmailBtn.href = buildFeedbackEmail(score);
