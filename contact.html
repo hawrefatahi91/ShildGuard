@@ -13,56 +13,88 @@ body{
   font-family: Arial, sans-serif;
   background: linear-gradient(135deg, #2b1b5a, #0b2a6b);
   color:white;
+}
+
+/* ================= NAV BAR ================= */
+
+nav{
+  width:100%;
   display:flex;
   justify-content:center;
-  align-items:center;
+  padding-top:20px;
 }
 
-.container{
-  background: rgba(255,255,255,0.08);
-  padding:40px;
+.nav-container{
+  width:95%;
+  max-width:1100px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter: blur(8px);
   border-radius:18px;
-  width:90%;
-  max-width:600px;
-  box-shadow:0 0 40px rgba(0,0,0,0.4);
-}
-
-.topbar{
+  padding:14px 22px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:20px;
+  box-shadow:0 0 20px rgba(0,0,0,0.3);
 }
 
 .brand{
+  color:white;
   font-weight:bold;
   font-size:18px;
 }
 
-.nav a{
-  margin-left:8px;
-  padding:8px 12px;
-  background: rgba(255,255,255,0.12);
+.nav-links a{
   color:white;
   text-decoration:none;
-  border-radius:8px;
-  font-weight:bold;
+  margin-left:18px;
+  font-weight:500;
 }
 
-.nav a:hover{
-  background: rgba(255,255,255,0.25);
+.nav-links a:hover{
+  text-decoration:underline;
+}
+
+.nav-links .active{
+  color:#00c8ff;
+}
+
+/* ================= PAGE CONTENT ================= */
+
+.container{
+  width:90%;
+  max-width:800px;
+  margin:60px auto;
+  background: rgba(255,255,255,0.08);
+  padding:50px;
+  border-radius:20px;
+  box-shadow:0 0 40px rgba(0,0,0,0.4);
 }
 
 h1{
+  text-align:center;
   margin-top:0;
+  font-size:36px;
+}
+
+p{
+  text-align:center;
+  font-size:17px;
+  margin-bottom:40px;
+  line-height:1.7;
+}
+
+/* ================= FORM ================= */
+
+label{
+  display:block;
+  margin-bottom:6px;
+  margin-top:18px;
 }
 
 input, textarea{
   width:100%;
   padding:12px;
-  margin-top:8px;
-  margin-bottom:15px;
-  border-radius:8px;
+  border-radius:10px;
   border:none;
   background: rgba(255,255,255,0.15);
   color:white;
@@ -70,67 +102,66 @@ input, textarea{
 }
 
 textarea{
-  min-height:130px;
+  min-height:140px;
+  resize:vertical;
 }
 
 button{
-  padding:12px 22px;
-  background:#00bfff;
+  margin-top:30px;
+  width:100%;
+  padding:14px;
+  background:#00c8ff;
   color:white;
   border:none;
-  border-radius:8px;
-  font-size:16px;
-  cursor:pointer;
+  border-radius:10px;
+  font-size:17px;
   font-weight:bold;
+  cursor:pointer;
 }
 
 button:hover{
-  background:#33ccff;
-}
-
-.small{
-  margin-top:15px;
-  font-size:13px;
-  opacity:0.85;
-}
-
-.email{
-  color:#7fe3ff;
-  font-weight:bold;
-  text-decoration:none;
+  background:#29d6ff;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<!-- ================= NAV BAR ================= -->
 
-  <div class="topbar">
+<nav>
+  <div class="nav-container">
     <div class="brand">🛡️ ShildGuard</div>
-    <div class="nav">
+    <div class="nav-links">
       <a href="index.html">Home</a>
       <a href="mission.html">Mission</a>
       <a href="quiz.html">Quiz</a>
-      <a href="contact.html">Contact</a>
+      <a href="contact.html" class="active">Contact</a>
     </div>
   </div>
+</nav>
+
+<!-- ================= MAIN CONTENT ================= -->
+
+<div class="container">
 
   <h1>Contact ShildGuard</h1>
 
-  <p>People and organizations can contact ShildGuard for questions or collaboration.</p>
+  <p>
+    People and organizations can contact ShildGuard for questions,
+    collaboration, or cybersecurity awareness initiatives.
+  </p>
 
-  <label>Name</label>
-  <input id="name" type="text" placeholder="Your name">
+  <label>Your Name</label>
+  <input id="name" type="text" placeholder="Enter your name">
 
-  <label>Organization (optional)</label>
+  <label>Organization (Optional)</label>
   <input id="org" type="text" placeholder="Company or school">
 
   <label>Message</label>
-  <textarea id="msg" placeholder="How can we help?"></textarea>
+  <textarea id="message" placeholder="How can we help?"></textarea>
 
-  <button id="sendBtn">Send Email</button>
-
+  <button id="sendBtn">Send Message</button>
 
 </div>
 
@@ -138,8 +169,13 @@ button:hover{
 document.getElementById("sendBtn").addEventListener("click", function(){
 
   const name = document.getElementById("name").value;
-  const org  = document.getElementById("org").value;
-  const msg  = document.getElementById("msg").value;
+  const org = document.getElementById("org").value;
+  const msg = document.getElementById("message").value;
+
+  if(!name || !msg){
+    alert("Please enter your name and message.");
+    return;
+  }
 
   const subject = encodeURIComponent("ShildGuard Contact");
   const body = encodeURIComponent(
@@ -149,8 +185,7 @@ document.getElementById("sendBtn").addEventListener("click", function(){
   );
 
   window.location.href =
-    "mailto:shildguard.supp@gmail.com?subject=" +
-    subject + "&body=" + body;
+    "mailto:shildguard.supp@gmail.com?subject=" + subject + "&body=" + body;
 });
 </script>
 
