@@ -127,7 +127,7 @@
     transition:width .2s ease;
   }
 
-  /* QUESTION + OPTIONS (VERTICAL, MOBILE FRIENDLY) */
+  /* QUESTION + OPTIONS (VERTICAL) */
   .card{
     background:var(--card2);
     border:1px solid var(--border);
@@ -265,12 +265,17 @@
 <div class="wrap">
   <div class="title">Cybersecurity Awareness Quiz</div>
   <div class="subtitle">
-    Random order. One question at a time. After you click Next, your answer is locked and cannot be changed.
+     <p>
+    This is an awareness quiz with 6 different categories and a total of 30 questions.
+  </p>
+
+  <p>
+    After completing the test, you will have the opportunity to submit feedback — I would greatly appreciate it if you do.
+  </p>
   </div>
 
   <div class="meta">
     <div class="pill" id="counterPill">Question 1 / 30</div>
-    <div class="pill" id="statusPill">0 / 30 answered</div>
   </div>
 
   <div class="progressWrap"><div class="progressBar" id="progressBar"></div></div>
@@ -293,60 +298,50 @@
 </div>
 
 <script>
-/* ========= Shuffle ========= */
-function shuffleArray(array){
-  for(let i=array.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [array[i],array[j]]=[array[j],array[i]];
-  }
-}
-
-/* ========= Questions (30) ========= */
-let questions = [
-  // Phishing & Email Security
+/* ========= Questions (30) — FIXED ORDER (NO SHUFFLE) ========= */
+const questions = [
+  // 1) Phishing & Email Security
   {q:"What is phishing?",o:["Antivirus scanning","Tricking users into giving sensitive info","Data encryption","Firewall filtering"],a:1,e:"Phishing uses deception to steal sensitive data like passwords or card numbers."},
   {q:"Common sign of phishing?",o:["Correct spelling","Urgent message","No links","Friendly greeting"],a:1,e:"Urgency pressures victims to act without verifying."},
   {q:"Before clicking a link you should?",o:["Click it","Forward it","Hover/preview the URL","Disable antivirus"],a:2,e:"Previewing the URL helps you spot fake domains and suspicious links."},
   {q:"Unexpected attachment from unknown sender?",o:["Open it","Save it","Delete & report","Rename it"],a:2,e:"Unknown attachments can contain malware; report it through proper channels."},
   {q:"What is spear phishing?",o:["Mass phishing","Phone scam","Targeted phishing","Virus"],a:2,e:"Spear phishing is targeted and tailored to a specific person or organization."},
 
-  // Passwords & Authentication
+  // 2) Passwords & Authentication
   {q:"Which password is strongest?",o:["Password123","Summer2024","P@ssword","9f#Q!Lk2@Zx8"],a:3,e:"Strong passwords are long, random, and unique."},
   {q:"Why avoid password reuse?",o:["Slows login","One breach affects many accounts","Uses more memory","Breaks Wi-Fi"],a:1,e:"Password reuse enables credential stuffing across multiple sites."},
   {q:"What does MFA/2FA do?",o:["Removes passwords","Adds extra verification","Encrypts Wi-Fi","Blocks malware"],a:1,e:"MFA adds a second factor so a stolen password alone isn’t enough."},
   {q:"Best place to store passwords?",o:["Sticky note","Email draft","Password manager","Notebook"],a:2,e:"Password managers store credentials securely and can generate strong passwords."},
   {q:"If your password is leaked, what should you do first?",o:["Ignore","Change the password","Post online","Reboot PC"],a:1,e:"Change your password immediately and enable MFA if available."},
 
-  // Social Engineering
+  // 3) Social Engineering
   {q:"Social engineering mainly targets:",o:["Hardware","Networks","People","Firewalls"],a:2,e:"Social engineering manipulates people, not systems."},
   {q:"Pretexting means:",o:["Malware","Fake story","Encryption","Backup"],a:1,e:"Pretexting uses a believable scenario to trick someone into sharing info or access."},
   {q:"Authority attacks involve pretending to be:",o:["A gamer","A stranger","A boss/IT/Police","A student"],a:2,e:"Attackers exploit authority to pressure compliance."},
   {q:"Baiting example:",o:["Patch update","Free USB drive","Firewall rule","Backup reminder"],a:1,e:"Baiting uses curiosity/temptation to lure victims."},
   {q:"Tailgating refers to:",o:["Email scam","Entering behind someone into a secure area","USB infection","VPN attack"],a:1,e:"Tailgating is physical intrusion by following authorized personnel."},
 
-  // Malware & Ransomware
+  // 4) Malware & Ransomware
   {q:"What is ransomware?",o:["Spyware","Locks files for payment","Firewall","Backup software"],a:1,e:"Ransomware encrypts or locks your files and demands payment."},
   {q:"Malware can spread through:",o:["Attachments","Fake websites","USB drives","All of the above"],a:3,e:"Malware spreads via links, downloads, attachments, and removable media."},
   {q:"What is spyware?",o:["Antivirus","Tracks user activity secretly","VPN","Backup tool"],a:1,e:"Spyware collects information about you without permission."},
   {q:"Best defense against malware:",o:["Disable updates","Antivirus + updates","Public Wi-Fi","Reusing passwords"],a:1,e:"Updates and endpoint protection reduce risk from known vulnerabilities."},
   {q:"If ransomware infects your PC:",o:["Pay immediately","Disconnect and report","Ignore it","Post online"],a:1,e:"Disconnect to limit spread and report to IT/security immediately."},
 
-  // Safe Browsing & Devices
+  // 5) Safe Browsing & Devices
   {q:"Safest way to access a website:",o:["Email link","Pop-up link","Bookmark or manual URL","Random search result"],a:2,e:"Bookmarks/manual URLs reduce the chance of landing on a fake site."},
   {q:"HTTPS means:",o:["The site is trusted","The connection is encrypted","No malware exists","Government verified"],a:1,e:"HTTPS encrypts traffic but doesn’t guarantee the site is legitimate."},
   {q:"Public Wi-Fi risk?",o:["Faster speed","Man-in-the-middle attacks","Better encryption","No risk"],a:1,e:"Unsafe Wi-Fi can allow attackers to intercept or manipulate traffic."},
   {q:"Best action before installing software:",o:["Skip license","Verify the source","Disable antivirus","Share the link"],a:1,e:"Install software only from trusted/official sources."},
   {q:"Why lock your screen?",o:["Save battery","Reduce shoulder surfing/unauthorized access","Faster boot","Hide wallpaper"],a:1,e:"A locked screen prevents someone from using your device when you step away."},
 
-  // Incident Response & Awareness
+  // 6) Incident Response & Awareness
   {q:"Who is responsible for cybersecurity?",o:["IT only","Managers only","Everyone","Hackers"],a:2,e:"Security is shared—everyone’s actions matter."},
   {q:"If you suspect phishing at work, you should:",o:["Reply","Delete only","Report and delete","Forward to friends"],a:2,e:"Reporting helps the organization respond and protect others."},
   {q:"Why report small incidents?",o:["Blame users","Detect patterns early","Waste time","Entertainment"],a:1,e:"Small reports can reveal larger campaigns early."},
   {q:"Why do attackers create urgency?",o:["Save time","Reduce rational thinking","Look professional","Encrypt data"],a:1,e:"Urgency pushes quick decisions without verification."},
   {q:"Safest action if unsure whether a message is legitimate:",o:["Click it","Reply","Verify via official channel/IT support","Ignore forever"],a:2,e:"Verify using trusted contact info and official channels before acting."}
 ];
-
-shuffleArray(questions);
 
 /* ========= State ========= */
 let index = 0;
@@ -439,6 +434,7 @@ nextBtn.addEventListener("click", () => {
       alert("Please select an answer.");
       return;
     }
+
     // Lock permanently (cannot be changed later)
     answersLocked[index] = selected;
 
@@ -471,7 +467,6 @@ backBtn.addEventListener("click", () => {
 
 restartBtn.addEventListener("click", () => {
   if(confirm("Restart the quiz? This will clear all answers.")){
-    shuffleArray(questions);
     for(let i=0;i<answersLocked.length;i++) answersLocked[i] = null;
     index = 0;
     score = 0;
@@ -509,22 +504,14 @@ function finish(){
 function buildFeedbackEmail(scoreVal){
   const total = questions.length;
   const percent = Math.round((scoreVal / total) * 100);
-  const letters = ["A","B","C","D"];
 
-  let wrongText = "";
+  // Only include question numbers (fixed order => Q# always same)
+  const wrongNums = [];
   for(let i=0;i<total;i++){
     const chosen = answersLocked[i];
-    const correct = questions[i].a;
-
-    if(chosen !== null && chosen !== correct){
-      wrongText +=
-        `Q${i+1}: ${questions[i].q}\n` +
-        `Your answer: ${letters[chosen]}) ${questions[i].o[chosen]}\n` +
-        `Correct answer: ${letters[correct]}) ${questions[i].o[correct]}\n\n`;
+    if(chosen !== null && chosen !== questions[i].a){
+      wrongNums.push(i + 1);
     }
-  }
-  if(wrongText === ""){
-    wrongText = "None (all answers correct)\n\n";
   }
 
   const subject = encodeURIComponent("ShildGuard Quiz Feedback");
@@ -534,8 +521,9 @@ function buildFeedbackEmail(scoreVal){
 I completed the quiz.
 Score: ${scoreVal}/${total} (${percent}%)
 
-Wrong Answers:
-${wrongText}
+Wrong questions:
+${wrongNums.length ? wrongNums.join(", ") : "None (all correct)"}
+
 Was it helpful? (yes/no):
 What should be improved?:
 
