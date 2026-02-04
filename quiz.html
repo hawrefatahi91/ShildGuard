@@ -81,7 +81,7 @@
 
   .meta{
     display:flex;
-    justify-content:space-between;
+    justify-content:center; /* only one pill now */
     gap:12px;
     flex-wrap:wrap;
     align-items:center;
@@ -118,7 +118,7 @@
     border:1px solid var(--border);
     border-radius:16px;
     padding:18px;
-    min-height: 140px;
+    min-height: 160px;
   }
   .qText{
     font-size: clamp(18px, 2.8vw, 22px);
@@ -145,7 +145,11 @@
   .option:hover{ background:rgba(255,255,255,0.16); }
   .option input{ margin-top:3px; transform: scale(1.05); }
   .optText{ line-height:1.3; font-size:16px; }
-  .option.disabled{ opacity:0.88; cursor:not-allowed; }
+
+  .option.disabled{
+    opacity:0.88;
+    cursor:not-allowed;
+  }
   .option.disabled:hover{ background:rgba(255,255,255,0.10); }
 
   .explain{
@@ -219,22 +223,17 @@
 
 <div class="wrap">
   <div class="title">Cybersecurity Awareness Quiz</div>
-     <p>
-    This is an awareness quiz with 6 different categories and a total of 30 questions.
-  </p>
+  <div class="subtitle">
+    Fixed question order. One question at a time. After you click Next, your answer is locked and cannot be changed.
+  </div>
 
-  <p>
-    After completing the test, you will have the opportunity to submit feedback — I greatly appreciate it if you do.
-  </p>
-
+  <!-- statusPill removed -->
   <div class="meta">
     <div class="pill" id="counterPill">Question 1 / 30</div>
-    <div class="pill" id="statusPill">0 / 30 answered</div>
   </div>
 
   <div class="progressWrap"><div class="progressBar" id="progressBar"></div></div>
 
-  <!-- IMPORTANT: This ID must match JS -->
   <div class="card" id="quizCard"></div>
 
   <div class="btnRow">
@@ -255,8 +254,8 @@
 <script>
 window.addEventListener("DOMContentLoaded", () => {
 
-  // 30  (fixed order)
-  const  = [
+  // ===== 30 QUESTIONS (FIXED ORDER) =====
+  const questions = [
     {q:"What is phishing?",o:["Antivirus scanning","Tricking users into giving sensitive info","Data encryption","Firewall filtering"],a:1,e:"Phishing uses deception to steal sensitive data like passwords or card numbers."},
     {q:"Common sign of phishing?",o:["Correct spelling","Urgent message","No links","Friendly greeting"],a:1,e:"Urgency pressures victims to act without verifying."},
     {q:"Before clicking a link you should?",o:["Click it","Forward it","Hover/preview the URL","Disable antivirus"],a:2,e:"Previewing the URL helps you spot fake domains and suspicious links."},
@@ -294,10 +293,9 @@ window.addEventListener("DOMContentLoaded", () => {
     {q:"Safest action if unsure whether a message is legitimate:",o:["Click it","Reply","Verify via official channel/IT support","Ignore forever"],a:2,e:"Verify using trusted contact info and official channels before acting."}
   ];
 
-  // Elements
+  // ===== Elements (MUST MATCH IDs) =====
   const quizCard = document.getElementById("quizCard");
   const counterPill = document.getElementById("counterPill");
-  const statusPill = document.getElementById("statusPill");
   const progressBar = document.getElementById("progressBar");
   const backBtn = document.getElementById("backBtn");
   const nextBtn = document.getElementById("nextBtn");
@@ -306,23 +304,18 @@ window.addEventListener("DOMContentLoaded", () => {
   const feedbackBox = document.getElementById("feedbackBox");
   const feedbackEmailBtn = document.getElementById("feedbackEmailBtn");
 
-  // State
+  // ===== State =====
   let index = 0;
   let score = 0;
-  const answersLocked = new Array(.length).fill(null);
+  const answersLocked = new Array(questions.length).fill(null);
   let showExplanation = false;
 
-  function answeredCount(){
-    return answersLocked.filter(v => v !== null).length;
-  }
-
   function render(){
-    const total = .length;
-    const q = [index];
+    const total = questions.length;
+    const q = questions[index];
 
+    // Update counter + progress
     counterPill.textContent = `Question ${index+1} / ${total}`;
-    statusPill.textContent = `${answeredCount()} / ${total} answered`;
-
     const pct = Math.round((index / Math.max(1, total - 1)) * 100);
     progressBar.style.width = pct + "%";
 
@@ -331,6 +324,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const locked = answersLocked[index] !== null;
     const radiosDisabled = locked || showExplanation;
 
+    // Build options
     let optionsHTML = `<div class="options">`;
     q.o.forEach((opt, i) => {
       const checked = (answersLocked[index] === i) ? "checked" : "";
@@ -345,6 +339,7 @@ window.addEventListener("DOMContentLoaded", () => {
     });
     optionsHTML += `</div>`;
 
+    // Explanation
     let explainHTML = "";
     if(showExplanation && answersLocked[index] !== null){
       explainHTML = `
@@ -355,12 +350,14 @@ window.addEventListener("DOMContentLoaded", () => {
       `;
     }
 
+    // Render card
     quizCard.innerHTML = `
       <div class="qText">${q.q}</div>
       ${optionsHTML}
       ${explainHTML}
     `;
 
+    // Button label
     nextBtn.textContent = showExplanation
       ? (index === total - 1 ? "Finish" : "Next Question")
       : "Next";
@@ -372,6 +369,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   nextBtn.addEventListener("click", () => {
+    // Answer stage -> lock + show explanation
     if(!showExplanation){
       const selected = getSelected();
       if(selected === null){
@@ -379,17 +377,17 @@ window.addEventListener("DOMContentLoaded", () => {
         return;
       }
       answersLocked[index] = selected;
-      if(selected === [index].a) score++;
+      if(selected === questions[index].a) score++;
       showExplanation = true;
       render();
       return;
     }
 
-    if(index === .length - 1){
+    // Explanation stage -> next or finish
+    if(index === questions.length - 1){
       finish();
       return;
     }
-
     index++;
     showExplanation = false;
     render();
@@ -418,13 +416,13 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   function buildFeedbackEmail(scoreVal){
-    const total = .length;
+    const total = questions.length;
     const percent = Math.round((scoreVal / total) * 100);
 
     const wrongNums = [];
     for(let i=0;i<total;i++){
       const chosen = answersLocked[i];
-      if(chosen !== null && chosen !== [i].a){
+      if(chosen !== null && chosen !== questions[i].a){
         wrongNums.push(i + 1);
       }
     }
@@ -436,7 +434,7 @@ window.addEventListener("DOMContentLoaded", () => {
 I completed the quiz.
 Score: ${scoreVal}/${total} (${percent}%)
 
-Wrong :
+Wrong questions:
 ${wrongNums.length ? wrongNums.join(", ") : "None (all correct)"}
 
 Was it helpful? (yes/no):
@@ -456,11 +454,11 @@ Thanks!`
       <div style="text-align:center; opacity:.9;">Thanks for taking the ShildGuard awareness quiz.</div>
     `;
 
-    const percent = Math.round((score / .length) * 100);
+    const percent = Math.round((score / questions.length) * 100);
     resultBox.classList.remove("hidden");
     resultBox.innerHTML = `
       <h3 style="margin:0 0 8px 0;">Your Score</h3>
-      <div style="font-size:22px; font-weight:900;">${score}/${.length} (${percent}%)</div>
+      <div style="font-size:22px; font-weight:900;">${score}/${questions.length} (${percent}%)</div>
     `;
 
     feedbackBox.classList.remove("hidden");
@@ -470,13 +468,10 @@ Thanks!`
     backBtn.classList.add("hidden");
   }
 
-  // Start
+  // IMPORTANT: render first question
   render();
 });
 </script>
 
 </body>
 </html>
-
-
-
