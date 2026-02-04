@@ -227,8 +227,8 @@
     After completing the test, you will have the opportunity to submit feedback — I greatly appreciate it if you do.
   </p>
 
-  <div class="meta">
-    <div class="pill" id="counterPill">Question 1 / 30</div>
+<div class="meta">
+    <div class="pill" id="counterPill">Question 1 / 30</div>  
   </div>
 
   <div class="progressWrap"><div class="progressBar" id="progressBar"></div></div>
@@ -254,8 +254,8 @@
 <script>
 window.addEventListener("DOMContentLoaded", () => {
 
-  // 30 Questions (fixed order)
-  const questions = [
+  // 30  (fixed order)
+  const  = [
     {q:"What is phishing?",o:["Antivirus scanning","Tricking users into giving sensitive info","Data encryption","Firewall filtering"],a:1,e:"Phishing uses deception to steal sensitive data like passwords or card numbers."},
     {q:"Common sign of phishing?",o:["Correct spelling","Urgent message","No links","Friendly greeting"],a:1,e:"Urgency pressures victims to act without verifying."},
     {q:"Before clicking a link you should?",o:["Click it","Forward it","Hover/preview the URL","Disable antivirus"],a:2,e:"Previewing the URL helps you spot fake domains and suspicious links."},
@@ -308,7 +308,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // State
   let index = 0;
   let score = 0;
-  const answersLocked = new Array(questions.length).fill(null);
+  const answersLocked = new Array(.length).fill(null);
   let showExplanation = false;
 
   function answeredCount(){
@@ -316,8 +316,8 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   function render(){
-    const total = questions.length;
-    const q = questions[index];
+    const total = .length;
+    const q = [index];
 
     counterPill.textContent = `Question ${index+1} / ${total}`;
     statusPill.textContent = `${answeredCount()} / ${total} answered`;
@@ -378,13 +378,13 @@ window.addEventListener("DOMContentLoaded", () => {
         return;
       }
       answersLocked[index] = selected;
-      if(selected === questions[index].a) score++;
+      if(selected === [index].a) score++;
       showExplanation = true;
       render();
       return;
     }
 
-    if(index === questions.length - 1){
+    if(index === .length - 1){
       finish();
       return;
     }
@@ -417,13 +417,13 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   function buildFeedbackEmail(scoreVal){
-    const total = questions.length;
+    const total = .length;
     const percent = Math.round((scoreVal / total) * 100);
 
     const wrongNums = [];
     for(let i=0;i<total;i++){
       const chosen = answersLocked[i];
-      if(chosen !== null && chosen !== questions[i].a){
+      if(chosen !== null && chosen !== [i].a){
         wrongNums.push(i + 1);
       }
     }
@@ -435,7 +435,7 @@ window.addEventListener("DOMContentLoaded", () => {
 I completed the quiz.
 Score: ${scoreVal}/${total} (${percent}%)
 
-Wrong questions:
+Wrong :
 ${wrongNums.length ? wrongNums.join(", ") : "None (all correct)"}
 
 Was it helpful? (yes/no):
@@ -455,11 +455,11 @@ Thanks!`
       <div style="text-align:center; opacity:.9;">Thanks for taking the ShildGuard awareness quiz.</div>
     `;
 
-    const percent = Math.round((score / questions.length) * 100);
+    const percent = Math.round((score / .length) * 100);
     resultBox.classList.remove("hidden");
     resultBox.innerHTML = `
       <h3 style="margin:0 0 8px 0;">Your Score</h3>
-      <div style="font-size:22px; font-weight:900;">${score}/${questions.length} (${percent}%)</div>
+      <div style="font-size:22px; font-weight:900;">${score}/${.length} (${percent}%)</div>
     `;
 
     feedbackBox.classList.remove("hidden");
@@ -476,4 +476,5 @@ Thanks!`
 
 </body>
 </html>
+
 
