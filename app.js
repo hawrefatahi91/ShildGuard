@@ -17,6 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const subject = encodeURIComponent(`ShieldGuard: ${topic}`);
     const body = encodeURIComponent(`Navn: ${name}\nVirksomhet: ${organization || "-"}\nE-post: ${email || "-"}\nTema: ${topic}\n\nMelding:\n${message}`);
     status.textContent = "Åpner e-postprogrammet ditt …";
-    window.location.href = `mailto:shildguard.supp@gmail.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:shieldguard.support@gmail.com?subject=${subject}&body=${body}`;
   });
 });
