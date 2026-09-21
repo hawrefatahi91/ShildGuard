@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700">
+  <rect width="1200" height="700" fill="#f8f8ff"></rect>
+  <rect x="60" y="60" width="1080" height="580" rx="18" fill="#fff" stroke="#d6d6ff" stroke-width="3"></rect>
+
+  <text x="90" y="130" font-family="Arial" font-size="30" fill="#111">Fake Login URL</text>
+
+  <rect x="90" y="180" width="1020" height="70" rx="14" fill="#f2f2ff" stroke="#d6d6ff"></rect>
+  <text x="120" y="225" font-family="Arial" font-size="24" fill="#111">https://accounts-go0gle.com/signin</text>
+
+  <rect x="90" y="290" width="520" height="58" rx="12" fill="#ffffff" stroke="#d6d6ff"></rect>
+  <text x="120" y="328" font-family="Arial" font-size="22" fill="#444">Email</text>
+
+  <rect x="90" y="370" width="520" height="58" rx="12" fill="#ffffff" stroke="#d6d6ff"></rect>
+  <text x="120" y="408" font-family="Arial" font-size="22" fill="#444">Password</text>
+
+  <rect x="90" y="450" width="240" height="56" rx="12" fill="#2a66ff"></rect>
+  <text x="120" y="488" font-family="Arial" font-size="22" fill="#fff">Sign in</text>
+</svg>
