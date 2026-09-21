@@ -1,20 +1,21 @@
 # ShieldGuard 2.0
 
-ShieldGuard is a static cyber security awareness website designed for GitHub Pages. Version 2.0 includes a responsive landing page, research-led mission page, accessible contact flow and a 30-question awareness assessment with category results.
+ShieldGuard er et statisk nettsted om sikkerhetsbevissthet, laget for GitHub Pages. Versjon 2.0 inneholder en responsiv forside, informasjon om prosjektet og grunnleggeren, kontaktside og en sikkerhetstest med 30 spørsmål og resultater fordelt på kategori.
 
-## Main files
+## Viktige filer
 
-- `index.html` — landing page
-- `mission.html` — mission and research background
-- `quiz.html` + `quiz.js` — interactive awareness assessment
-- `contact.html` — contact page using the visitor's email application
-- `styles.css` — shared responsive design
-- `app.js` — navigation, footer and contact form behaviour
+- `index.html` – forside og informasjon om grunnleggeren
+- `mission.html` – formål og forskningsgrunnlag
+- `quiz.html` og `quiz.js` – interaktiv sikkerhetstest
+- `contact.html` – kontaktside som bruker den besøkendes e-postprogram
+- `styles.css` – felles responsivt design
+- `app.js` – meny, bunntekst og kontaktskjema
+- `ShieldGuard-no.png` – toppbilde uten engelsk tekst
 
-## Preview locally
+## Forhåndsvis lokalt
 
-Open `index.html` directly in a browser, or run `python -m http.server 8000` from the project folder and visit `http://localhost:8000`.
+Åpne `index.html` direkte i en nettleser, eller kjør `python -m http.server 8000` fra prosjektmappen og gå til `http://localhost:8000`.
 
-## Publish
+## Publisering
 
-Upload these files to the `shieldguard-v2` branch and preview the branch before merging it into `main`. The current live GitHub Pages site remains unchanged until the branch is merged or the Pages source is changed.
+Last opp de oppdaterte filene til roten av `main`-grenen. GitHub Pages publiserer deretter nettstedet automatisk.
