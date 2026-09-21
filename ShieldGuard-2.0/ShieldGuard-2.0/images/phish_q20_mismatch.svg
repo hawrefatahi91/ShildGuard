@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700">
+  <rect width="1200" height="700" fill="#fffaf6"></rect>
+  <rect x="60" y="60" width="1080" height="580" rx="18" fill="#fff" stroke="#ffd9b8" stroke-width="3"></rect>
+
+  <text x="90" y="130" font-family="Arial" font-size="30" fill="#111">Mismatched Sender Example</text>
+
+  <rect x="90" y="180" width="1020" height="160" rx="14" fill="#fff2e6" stroke="#ffc79a"></rect>
+  <text x="120" y="245" font-family="Arial" font-size="26" fill="#111">From: PayPal Support</text>
+  <text x="120" y="295" font-family="Arial" font-size="26" fill="#111">Address: billing@paypaI-verification.com</text>
+</svg>

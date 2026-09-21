@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700">
+  <rect width="1200" height="700" fill="#f6f8ff"></rect>
+  <rect x="60" y="60" width="1080" height="580" rx="18" fill="#fff" stroke="#c9d4ff" stroke-width="3"></rect>
+
+  <text x="90" y="130" font-family="Arial" font-size="30" fill="#111">Link Preview</text>
+
+  <text x="90" y="220" font-family="Arial" font-size="24" fill="#333">Button text: Sign in to view document</text>
+
+  <rect x="90" y="260" width="520" height="66" rx="12" fill="#2a66ff"></rect>
+  <text x="120" y="304" font-family="Arial" font-size="26" fill="#fff">SIGN IN</text>
+
+  <rect x="90" y="360" width="1020" height="120" rx="14" fill="#eef2ff" stroke="#c9d4ff"></rect>
+  <text x="120" y="430" font-family="Arial" font-size="22" fill="#111">
+    Preview URL: https://docs-share-login.secure-verify.net
+  </text>
+</svg>
