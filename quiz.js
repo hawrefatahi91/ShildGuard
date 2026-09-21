@@ -1,46 +1,110 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const questions = [
-    {category:"Phishing og e-post",q:"Hva er phishing?",o:["Skanning med antivirus","Å lure brukere til å avsløre sensitiv informasjon","Kryptering av data","Filtrering i brannmur"],a:1,e:"Phishing bruker bedrag for å stjele informasjon som passord, betalingsopplysninger eller tilgangsdata."},
-    {category:"Phishing og e-post",q:"Hva er et vanlig faresignal ved phishing?",o:["En melding du forventet","Et krav om å handle umiddelbart","En lagret kontakt","En vanlig firmasignatur"],a:1,e:"Tidspress gjør det mindre sannsynlig at du stopper opp og undersøker om forespørselen er ekte."},
-    {category:"Phishing og e-post",q:"Hva bør du gjøre før du klikker på en lenke i en melding?",o:["Klikke raskt før den utløper","Videresende den til en kollega","Forhåndsvise adressen og kontrollere domenet","Slå av antivirusprogrammet"],a:2,e:"Ved å forhåndsvise lenken kan du oppdage feilstavede, villedende eller ukjente domener."},
-    {category:"Phishing og e-post",q:"Du mottar et uventet vedlegg fra en ukjent avsender. Hva er tryggest?",o:["Åpne det i tilfelle det er viktig","Lagre det til senere","Rapportere meldingen og fjerne den","Endre navnet på filen"],a:2,e:"Uventede vedlegg kan inneholde skadevare. Rapporter dem gjennom riktig kanal uten å åpne dem."},
-    {category:"Phishing og e-post",q:"Hva er målrettet phishing?",o:["En tilfeldig melding sendt til millioner","En svindel som bare skjer på telefon","En målrettet melding tilpasset en person eller virksomhet","En type datavirus"],a:2,e:"Målrettet phishing bruker opplysninger om personen eller virksomheten for å gjøre meldingen mer troverdig."},
-    {category:"Passord og MFA",q:"Hvilket passord er sterkest?",o:["Password123","Sommer2026","P@ssord","9f#Q!Lk2@Zx8"],a:3,e:"Et sterkt passord er langt, vanskelig å gjette og unikt for den aktuelle kontoen."},
-    {category:"Passord og MFA",q:"Hvorfor bør du unngå å bruke samme passord flere steder?",o:["Det gjør innloggingen tregere","Én lekkasje kan gi tilgang til flere kontoer","Det bruker mer minne på enheten","Det kan koble fra Wi-Fi"],a:1,e:"Angripere prøver ofte lekkede innloggingsopplysninger på andre tjenester. Unike passord begrenser skaden fra én lekkasje."},
-    {category:"Passord og MFA",q:"Hva legger flerfaktorautentisering til?",o:["En erstatning for alle passord","En ekstra måte å bekrefte identiteten din på","Automatisk kryptering av Wi-Fi","En skanner for skadevare"],a:1,e:"MFA krever en ekstra faktor. Derfor er et stjålet passord alene vanligvis ikke nok til å få tilgang til kontoen."},
-    {category:"Passord og MFA",q:"Hvor er det best å lagre mange unike passord?",o:["På en lapp ved siden av enheten","I et e-postutkast","I en anerkjent passordbehandler","I det samme ukrypterte dokumentet"],a:2,e:"Passordbehandlere beskytter innloggingsopplysninger og hjelper deg med å lage sterke, unike passord."},
-    {category:"Passord og MFA",q:"Du oppdager at et av passordene dine er lekket. Hva bør du gjøre først?",o:["Ignorere det til kontoen slutter å virke","Endre det med en gang og kontrollere om det er brukt andre steder","Legge ut advarselen offentlig","Starte enheten på nytt"],a:1,e:"Endre det utsatte passordet umiddelbart, bytt alle gjenbrukte passord og aktiver MFA der det er mulig."},
-    {category:"Sosial manipulering",q:"Hva retter sosial manipulering seg først og fremst mot?",o:["Datamaskinens maskinvare","Nettverkskabler","Mennesker og valgene deres","Brannmurprogramvare"],a:2,e:"Sosial manipulering påvirker menneskelig atferd for å skaffe informasjon, penger eller tilgang."},
-    {category:"Sosial manipulering",q:"Hva betyr det å bruke et falskt påskudd?",o:["Å installere skadevare","Å bruke en oppdiktet historie eller identitet","Å kryptere en sikkerhetskopi","Å oppdatere et system"],a:1,e:"Et falskt påskudd er en troverdig historie som skal få noen til å dele informasjon eller gi tilgang."},
-    {category:"Sosial manipulering",q:"I et angrep basert på autoritet kan angriperen late som om hen er:",o:["En tilfeldig spiller","En ukjent forbipasserende","En leder, IT-medarbeider eller politibetjent","En medstudent uten noen forespørsel"],a:2,e:"Angripere utgir seg for å være autoritetspersoner fordi mange da følger beskjeder uten å stille spørsmål."},
-    {category:"Sosial manipulering",q:"Hva er et eksempel på lokkemiddel som angrepsmetode?",o:["Å installere en godkjent oppdatering","Å legge igjen en fristende, ukjent USB-enhet","Å endre en regel i brannmuren","Å sende en vanlig påminnelse om sikkerhetskopiering"],a:1,e:"Et lokkemiddel utnytter nysgjerrighet eller fristelse for å få noen til å utføre en risikabel handling."},
-    {category:"Sosial manipulering",q:"Hva betyr det å snike seg inn etter en autorisert person?",o:["Å sende en falsk e-post","Å følge etter en godkjent person inn i et avsperret område","Å infisere en USB-enhet","Å angripe en VPN"],a:1,e:"Dette er et fysisk sikkerhetsbrudd der en uvedkommende følger etter noen gjennom en adgangskontrollert inngang."},
-    {category:"Skadevare og løsepengevirus",q:"Hva er løsepengevirus?",o:["En sporingsinformasjonskapsel","Skadevare som låser eller krypterer data og krever betaling","En funksjon i brannmuren","Et program for sikkerhetskopiering"],a:1,e:"Løsepengevirus hindrer tilgang til systemer eller data, ofte ved kryptering, og krever betaling for å gjenopprette dem."},
-    {category:"Skadevare og løsepengevirus",q:"Hvordan kan skadevare spre seg?",o:["Gjennom e-postvedlegg","Gjennom kompromitterte nettsteder","Gjennom flyttbare lagringsenheter","Alle alternativene ovenfor"],a:3,e:"Skadevare kan spre seg gjennom vedlegg, nedlastinger, nettsteder, flyttbare medier og mange andre veier."},
-    {category:"Skadevare og løsepengevirus",q:"Hva er spionprogramvare?",o:["Antivirusprogramvare","Programvare som overvåker aktivitet eller samler inn data i skjul","En VPN-tjeneste","Et verktøy for sikkerhetskopiering"],a:1,e:"Spionprogramvare følger med på aktivitet og samler inn informasjon uten at brukeren har gitt informert samtykke."},
-    {category:"Skadevare og løsepengevirus",q:"Hva gir best daglig beskyttelse mot kjent skadevare?",o:["Å slå av oppdateringer","Sikkerhetsprogramvare og raske oppdateringer","Å bruke offentlig Wi-Fi","Å gjenbruke passord"],a:1,e:"Oppdateringer tetter kjente sårbarheter, mens sikkerhetsverktøy kan blokkere eller oppdage mange vanlige trusler."},
-    {category:"Skadevare og løsepengevirus",q:"Hva bør du gjøre først hvis du mistenker løsepengevirus på en jobb-PC?",o:["Betale med en gang","Koble enheten fra nettverket og rapportere hendelsen","Ignorere advarselen","Legge ut et skjermbilde på nettet"],a:1,e:"Isolering kan hindre videre spredning. Rapporter hendelsen umiddelbart, slik at arbeidet med å håndtere den kan starte."},
-    {category:"Trygg surfing og enheter",q:"Hva er den tryggeste måten å åpne et følsomt nettsted, som nettbanken?",o:["Bruke en lenke fra en uventet e-post","Følge en sprettoppannonse","Bruke et trygt bokmerke eller skrive inn den kjente adressen","Velge et tilfeldig sponset søkeresultat"],a:2,e:"Et trygt bokmerke eller en kjent adresse reduserer risikoen for å havne på et overbevisende, falskt nettsted."},
-    {category:"Trygg surfing og enheter",q:"Hva forteller HTTPS deg?",o:["At nettstedet helt sikkert er pålitelig","At forbindelsen til nettstedet er kryptert","At nettstedet ikke kan inneholde skadevare","At myndighetene har bekreftet eieren"],a:1,e:"HTTPS beskytter data under overføring, men kriminelle kan også bruke HTTPS. Du må fortsatt kontrollere domenet og innholdet."},
-    {category:"Trygg surfing og enheter",q:"Hva er en mulig risiko ved et ukjent offentlig Wi-Fi-nettverk?",o:["At enheten lades for raskt","At trafikken avlyttes eller manipuleres","At krypteringen alltid blir sterkere","At det ikke finnes noen ekstra risiko"],a:1,e:"Et ondsinnet eller dårlig sikret nettverk kan gjøre det mulig for angripere å overvåke eller påvirke trafikken."},
-    {category:"Trygg surfing og enheter",q:"Hva bør du gjøre før du installerer programvare?",o:["Hoppe over all informasjon","Kontrollere at kilden er offisiell og pålitelig","Slå av sikkerhetsbeskyttelsen","Dele nedlastingslenken først"],a:1,e:"Bruk offisielle, pålitelige kilder og kontroller utgiveren før du installerer programvare."},
-    {category:"Trygg surfing og enheter",q:"Hvorfor bør du låse skjermen når du går fra enheten?",o:["For å spare litt batteri","For å hindre uvedkommende i å få tilgang","For å øke oppstartshastigheten","For å skjule bakgrunnsbildet"],a:1,e:"En låst skjerm hindrer andre i å bruke den aktive økten din mens enheten står uten tilsyn."},
-    {category:"Hendelser og rapportering",q:"Hvem har ansvar for cybersikkerhet i en virksomhet?",o:["Bare IT-avdelingen","Bare ledelsen","Alle","Bare eksterne sikkerhetseksperter"],a:2,e:"Sikkerhet er et felles ansvar. Handlingene til hver enkelt kan bidra til å forebygge, oppdage og rapportere hendelser."},
-    {category:"Hendelser og rapportering",q:"Du mistenker at en e-post på jobben er phishing. Hva bør du gjøre?",o:["Svare for å utfordre avsenderen","Slette den uten å si fra","Rapportere den gjennom riktig kanal og deretter fjerne den","Videresende den til venner"],a:2,e:"Rapportering hjelper sikkerhetsteamet med å undersøke kampanjen og beskytte andre som kan ha mottatt den."},
-    {category:"Hendelser og rapportering",q:"Hvorfor er det nyttig å rapportere små eller usikre hendelser?",o:["For å plassere skyld","De kan avsløre et større mønster tidlig","For å lage mer papirarbeid","For underholdningens skyld"],a:1,e:"Flere små rapporter kan avdekke et koordinert angrep før det forårsaker alvorlig skade."},
-    {category:"Hendelser og rapportering",q:"Hvorfor skaper angripere tidspress?",o:["For å spare deg for tid","For å redusere grundig og rasjonell tenkning","For å virke mer profesjonelle","For å kryptere meldingen"],a:1,e:"Tidspress oppmuntrer til impulsive handlinger og gjør det mindre sannsynlig at du undersøker forespørselen på egen hånd."},
-    {category:"Hendelser og rapportering",q:"Hva er tryggest når du er usikker på om en forespørsel er ekte?",o:["Klikke på lenken du fikk","Svare med opplysningene som etterspørres","Bekrefte forespørselen gjennom en annen, pålitelig kanal","Ignorere alle fremtidige meldinger"],a:2,e:"Kontakt personen eller virksomheten med opplysninger du vet er riktige – ikke med kontaktinformasjonen i den mistenkelige meldingen."}
+  const bank = Array.isArray(window.SHIELDGUARD_QUESTION_BANK) ? window.SHIELDGUARD_QUESTION_BANK : [];
+  const categories = [
+    "Phishing og e-post",
+    "Passord og MFA",
+    "Sosial manipulering",
+    "Skadevare og løsepengevirus",
+    "Trygg surfing og enheter",
+    "Hendelser og rapportering"
   ];
+  const difficulties = ["easy", "medium", "hard"];
+  const difficultyLabels = {easy:"Lett", medium:"Middels", hard:"Vanskelig"};
+  const patterns = [
+    {easy:2, medium:2, hard:1},
+    {easy:2, medium:1, hard:2},
+    {easy:1, medium:2, hard:2}
+  ];
+  const sessionKey = "shieldguard-test-v1";
+  const historyKey = "shieldguard-question-history-v1";
+  const cycleKey = "shieldguard-selection-cycle-v1";
 
   const get = (id) => document.getElementById(id);
   const intro = get("quiz-intro"), app = get("quiz-app"), results = get("results-view"), questionCard = get("question-card");
   const categoryLabel = get("category-label"), questionCount = get("question-count"), progressPercent = get("progress-percent"), progressBar = get("progress-bar");
   const progressTrack = document.querySelector(".progress-track"), previousButton = get("previous-button"), checkButton = get("check-button"), nextButton = get("next-button");
-  let current = 0, answers = new Array(questions.length).fill(null), revealed = new Array(questions.length).fill(false);
+  let questions = [], current = 0, answers = [], revealed = [];
+
+  function randomIndex(max) {
+    if (max <= 1) return 0;
+    if (window.crypto && window.crypto.getRandomValues) {
+      const limit = Math.floor(0x100000000 / max) * max;
+      const value = new Uint32Array(1);
+      do { window.crypto.getRandomValues(value); } while (value[0] >= limit);
+      return value[0] % max;
+    }
+    return Math.floor(Math.random() * max);
+  }
+
+  function shuffle(items) {
+    const copy = [...items];
+    for (let i = copy.length - 1; i > 0; i -= 1) {
+      const j = randomIndex(i + 1);
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  function readStorage(storage, key, fallback) {
+    try { const value = storage.getItem(key); return value ? JSON.parse(value) : fallback; }
+    catch (_) { return fallback; }
+  }
+
+  function writeStorage(storage, key, value) {
+    try { storage.setItem(key, JSON.stringify(value)); }
+    catch (_) { /* Testen fungerer fortsatt dersom lagring er blokkert. */ }
+  }
+
+  function prepareQuestion(item) {
+    const mixed = shuffle(item.o.map((text, originalIndex) => ({text, originalIndex})));
+    return {...item, o:mixed.map((option) => option.text), a:mixed.findIndex((option) => option.originalIndex === item.a)};
+  }
+
+  function selectQuestions() {
+    const history = readStorage(localStorage, historyKey, {});
+    const storedCycle = Number(readStorage(localStorage, cycleKey, 0));
+    const cycle = Number.isInteger(storedCycle) ? ((storedCycle % patterns.length) + patterns.length) % patterns.length : 0;
+    const selected = [];
+
+    categories.forEach((category, categoryIndex) => {
+      const allocation = patterns[(categoryIndex + cycle) % patterns.length];
+      difficulties.forEach((difficulty) => {
+        const poolKey = `${category}|${difficulty}`;
+        const pool = bank.filter((item) => item.category === category && item.difficulty === difficulty);
+        const seen = Array.isArray(history[poolKey]) ? history[poolKey] : [];
+        let available = pool.filter((item) => !seen.includes(item.id));
+        if (available.length < allocation[difficulty]) {
+          history[poolKey] = [];
+          available = [...pool];
+        }
+        const chosen = shuffle(available).slice(0, allocation[difficulty]);
+        selected.push(...chosen);
+        history[poolKey] = [...(history[poolKey] || []), ...chosen.map((item) => item.id)];
+      });
+    });
+
+    writeStorage(localStorage, historyKey, history);
+    writeStorage(localStorage, cycleKey, (cycle + 1) % patterns.length);
+    const prepared = shuffle(selected).map(prepareQuestion);
+    writeStorage(sessionStorage, sessionKey, prepared);
+    return prepared;
+  }
+
+  function loadQuestions(forceNew = false) {
+    const saved = forceNew ? [] : readStorage(sessionStorage, sessionKey, []);
+    questions = saved.length === 30 ? saved : selectQuestions();
+    current = 0;
+    answers = new Array(questions.length).fill(null);
+    revealed = new Array(questions.length).fill(false);
+  }
 
   function renderQuestion() {
     const item = questions[current], percent = Math.round(((current + 1) / questions.length) * 100);
-    categoryLabel.textContent = item.category; questionCount.textContent = `Spørsmål ${current + 1} av ${questions.length}`; progressPercent.textContent = `${percent}%`; progressBar.style.width = `${percent}%`; progressTrack.setAttribute("aria-valuenow", String(percent));
+    categoryLabel.textContent = item.category;
+    questionCount.textContent = `Spørsmål ${current + 1} av ${questions.length}`;
+    progressPercent.textContent = `${percent}%`;
+    progressBar.style.width = `${percent}%`;
+    progressTrack.setAttribute("aria-valuenow", String(percent));
     const options = item.o.map((option, index) => {
       const selected = answers[current] === index;
       let state = selected ? " selected" : "";
@@ -49,27 +113,65 @@ document.addEventListener("DOMContentLoaded", () => {
       return `<button class="answer-option${state}" type="button" data-answer="${index}" ${revealed[current] ? "disabled" : ""}><span class="answer-letter">${String.fromCharCode(65 + index)}</span><span>${option}</span><i aria-hidden="true"></i></button>`;
     }).join("");
     const feedback = revealed[current] ? `<div class="answer-feedback ${answers[current] === item.a ? "is-correct" : "is-incorrect"}"><strong>${answers[current] === item.a ? "Riktig – godt sett." : `Ikke helt. Riktig svar er ${String.fromCharCode(65 + item.a)}.`}</strong><p>${item.e}</p></div>` : "";
-    questionCard.innerHTML = `<div class="question-number">Spørsmål ${String(current + 1).padStart(2,"0")}</div><h2>${item.q}</h2><div class="answer-list">${options}</div>${feedback}`;
-    previousButton.disabled = current === 0; checkButton.classList.toggle("hidden", revealed[current]); nextButton.classList.toggle("hidden", !revealed[current]); checkButton.disabled = answers[current] === null; nextButton.textContent = current === questions.length - 1 ? "Se resultatet mitt →" : "Neste spørsmål →";
-    questionCard.querySelectorAll(".answer-option").forEach((button) => button.addEventListener("click", () => { answers[current] = Number(button.dataset.answer); renderQuestion(); }));
+    questionCard.innerHTML = `<div class="question-number">Spørsmål ${String(current + 1).padStart(2,"0")} · ${difficultyLabels[item.difficulty]}</div><h2>${item.q}</h2><div class="answer-list">${options}</div>${feedback}`;
+    previousButton.disabled = current === 0;
+    checkButton.classList.toggle("hidden", revealed[current]);
+    nextButton.classList.toggle("hidden", !revealed[current]);
+    checkButton.disabled = answers[current] === null;
+    nextButton.textContent = current === questions.length - 1 ? "Se resultatet mitt →" : "Neste spørsmål →";
+    questionCard.querySelectorAll(".answer-option").forEach((button) => button.addEventListener("click", () => {
+      answers[current] = Number(button.dataset.answer);
+      renderQuestion();
+    }));
+  }
+
+  function resultRows(groups, labelKey) {
+    return groups.map((group) => {
+      const matching = questions.map((item,index) => ({...item,index})).filter((item) => item[labelKey] === group);
+      const correct = matching.filter((item) => answers[item.index] === item.a).length;
+      const percent = Math.round((correct / matching.length) * 100);
+      const label = labelKey === "difficulty" ? difficultyLabels[group] : group;
+      return `<div class="result-row"><div><span>${label}</span><small>${correct}/${matching.length} riktige</small></div><div class="result-meter"><i style="width:${percent}%"></i></div><strong>${percent}%</strong></div>`;
+    }).join("");
   }
 
   function showResults() {
-    app.classList.add("hidden"); results.classList.remove("hidden");
-    const score = answers.reduce((total, answer, index) => total + (answer === questions[index].a ? 1 : 0), 0), percent = Math.round((score / questions.length) * 100);
-    const categories = [...new Set(questions.map((item) => item.category))];
-    const breakdown = categories.map((category) => { const group = questions.map((item,index) => ({...item,index})).filter((item) => item.category === category); const correct = group.filter((item) => answers[item.index] === item.a).length; const pct = Math.round((correct / group.length) * 100); return `<div class="result-row"><div><span>${category}</span><small>${correct}/${group.length} riktige</small></div><div class="result-meter"><i style="width:${pct}%"></i></div><strong>${pct}%</strong></div>`; }).join("");
+    app.classList.add("hidden");
+    results.classList.remove("hidden");
+    const score = answers.reduce((total, answer, index) => total + (answer === questions[index].a ? 1 : 0), 0);
+    const percent = Math.round((score / questions.length) * 100);
     const wrong = questions.map((item,index) => ({...item,index})).filter((item) => answers[item.index] !== item.a);
-    const review = wrong.length ? `<details class="review-panel"><summary>Se gjennom ${wrong.length} ${wrong.length === 1 ? "spørsmål" : "spørsmål"} på nytt</summary><div>${wrong.map((item) => `<article><span>${item.category} · Spørsmål ${item.index + 1}</span><strong>${item.q}</strong><p>${item.e}</p></article>`).join("")}</div></details>` : `<div class="perfect-note">Svært bra – du svarte riktig på alle spørsmålene.</div>`;
-    let level = "Bevisstheten er under utvikling", message = "Les forklaringene og konsentrer deg om kategoriene med lavest poengsum.";
+    const review = wrong.length ? `<details class="review-panel"><summary>Se gjennom ${wrong.length} spørsmål på nytt</summary><div>${wrong.map((item) => `<article><span>${item.category} · ${difficultyLabels[item.difficulty]} · spørsmål ${item.index + 1}</span><strong>${item.q}</strong><p>${item.e}</p></article>`).join("")}</div></details>` : `<div class="perfect-note">Svært bra – du svarte riktig på alle spørsmålene.</div>`;
+    let level = "Bevisstheten er under utvikling", message = "Les forklaringene og konsentrer deg om områdene med lavest poengsum.";
     if (percent >= 90) { level = "Svært god sikkerhetsbevissthet"; message = "Du gjenkjente gjennomgående det tryggeste valget i hele testen."; }
     else if (percent >= 75) { level = "Sterk sikkerhetsbevissthet"; message = "Du har et solid grunnlag. Se gjennom de få områdene som var utfordrende."; }
     else if (percent >= 60) { level = "Godt grunnlag"; message = "Du kjenner igjen mange vanlige risikoer og kan styrke vanene dine ytterligere."; }
-    results.innerHTML = `<div class="results-head"><div class="score-ring" style="--score:${percent * 3.6}deg"><div><strong>${percent}%</strong><span>${score}/${questions.length}</span></div></div><div><div class="eyebrow"><span></span> Testen er fullført</div><h1>${level}</h1><p>${message}</p></div></div><div class="results-card"><div class="results-title"><h2>Resultat per kategori</h2><span>Resultater</span></div>${breakdown}</div>${review}<div class="result-actions"><button class="button button-primary" id="restart-quiz" type="button">Ta testen på nytt</button><a class="button button-secondary" href="contact.html">Gi tilbakemelding</a></div>`;
-    get("restart-quiz").addEventListener("click", restartQuiz); window.scrollTo({top:0,behavior:"smooth"});
+    results.innerHTML = `<div class="results-head"><div class="score-ring" style="--score:${percent * 3.6}deg"><div><strong>${percent}%</strong><span>${score}/${questions.length}</span></div></div><div><div class="eyebrow"><span></span> Testen er fullført</div><h1>${level}</h1><p>${message}</p></div></div><div class="results-card"><div class="results-title"><h2>Resultat per kategori</h2><span>6 kategorier</span></div>${resultRows(categories,"category")}</div><div class="results-card"><div class="results-title"><h2>Resultat etter vanskelighetsgrad</h2><span>10 av hvert nivå</span></div>${resultRows(difficulties,"difficulty")}</div>${review}<div class="result-actions"><button class="button button-primary" id="restart-quiz" type="button">Ta en ny test</button><a class="button button-secondary" href="contact.html">Gi tilbakemelding</a></div>`;
+    get("restart-quiz").addEventListener("click", restartQuiz);
+    window.scrollTo({top:0,behavior:"smooth"});
   }
-  function restartQuiz() { current = 0; answers = new Array(questions.length).fill(null); revealed = new Array(questions.length).fill(false); results.classList.add("hidden"); app.classList.remove("hidden"); renderQuestion(); window.scrollTo({top:0,behavior:"smooth"}); }
-  get("start-quiz").addEventListener("click", () => { intro.classList.add("hidden"); app.classList.remove("hidden"); renderQuestion(); });
+
+  function restartQuiz() {
+    try { sessionStorage.removeItem(sessionKey); } catch (_) {}
+    loadQuestions(true);
+    results.classList.add("hidden");
+    app.classList.remove("hidden");
+    renderQuestion();
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+
+  if (bank.length !== 90) {
+    get("start-quiz").disabled = true;
+    get("start-quiz").textContent = "Spørsmålsbanken kunne ikke lastes";
+    return;
+  }
+
+  get("start-quiz").addEventListener("click", () => {
+    loadQuestions();
+    intro.classList.add("hidden");
+    app.classList.remove("hidden");
+    renderQuestion();
+  });
   checkButton.addEventListener("click", () => { if (answers[current] !== null) { revealed[current] = true; renderQuestion(); } });
   nextButton.addEventListener("click", () => { if (current === questions.length - 1) showResults(); else { current += 1; renderQuestion(); window.scrollTo({top:0,behavior:"smooth"}); } });
   previousButton.addEventListener("click", () => { if (current > 0) { current -= 1; renderQuestion(); } });
